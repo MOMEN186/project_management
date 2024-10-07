@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import {
@@ -25,50 +25,39 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ReactQuill from "react-quill";
 import dayjs from "dayjs";
-import { getProjects,getProjectByID } from "../../controllers/ProjectsController";
-import { updateTask } from "../../controllers/TaskController";
+import { getProjects } from "../../controllers/ProjectsController";
+import { updateTask,createTask } from "../../controllers/TaskController";
+import { cookiesContext } from "../../App";
 function Task() {
   const location = useLocation();
 
-  const [title, setTitle] = useState(location.state?.title||"");
-  const [description, setDescription] = useState(location.state?.descrip||"");
-  const [tday, setTday] = useState(dayjs(location.state?.end_date||new Date()));
-  const [status, setStatus] = useState(location.state?.status||"todo");
+  const [title, setTitle] = useState(location.state?.title || "");
+  const [description, setDescription] = useState(location.state?.descrip || "");
+  const [tday, setTday] = useState(dayjs(location.state?.end_date || new Date()));
+  const [status, setStatus] = useState(location.state?.status || "todo");
   const [projects, setProjects] = useState([]);
   const [current_project, setCurrent_project] = useState({
-    id: location.state?.id||"",
-    title:'',
+    id: location.state?.id || "",
+    title: '',
   });
-
-
+  const newTask = location.state?.id || 0;
+  const cookies = useContext(cookiesContext);
+  
   useEffect(() => {
     async function fetchProjects() {
-      const result = await getProjects();
+      const result = await getProjects(cookies.get("token"));
       setProjects(result);
     }
 
-    async function fetchProjectByID() {
-      const result = await getProjectByID(location.state.project_id);
-      setCurrent_project({
-        id: result.id,
-        title:result.title,
-        
-       })
-     
-    }
-
     fetchProjects();
-    fetchProjectByID();
 
-  }, [location.state.project_id]);
+  }, [current_project.id]);
 
   
-
-
-
-
   const handleSubmit = async (e) => {
-    updateTask(current_project.id,title, description, tday, status,location.state.id);
+    if (newTask)createTask(current_project.id,title,description,tday,status,cookies.get("token"))
+      else
+     updateTask(current_project.id,title, description, tday, status,location.state.id,cookies.get("token"));
   };
 
   return (
@@ -156,8 +145,7 @@ function Task() {
                       onChange={(e) => {
                         
                         setStatus(e.target.value);
-                      }}
-                    >
+                      }}>
                       <MenuItem value="todo">Todo</MenuItem>
                       <MenuItem value="In Progress">In Progress</MenuItem>
                       <MenuItem value="Code Review">Code Review</MenuItem>

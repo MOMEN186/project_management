@@ -1,13 +1,14 @@
 import { formatDate } from "./dateController";
 
 
-export async function getProjects() {
-    
+export async function getProjects(token) {
+    console.log({token});
     const result = await fetch("http://localhost:8080/projects", {
     method: "GET",
     headers: {
       Accept: "*/*",
-      'Content-Type':"application/json",
+        'Content-Type': "application/json",
+        "token":token,
     },
 
   });
@@ -38,7 +39,7 @@ export async function getProjectByID(id) {
 }
 
 
-export async function createProject(title,description,tday) {
+export async function createProject(title,description,tday,token) {
     
 
     console.log({title,description,tday});
@@ -49,13 +50,15 @@ export async function createProject(title,description,tday) {
         method: "POST",
         headers: {
             Accept: "*/*",
-            'Content-Type':"application/json",
+            'Content-Type': "application/json",
+            "token":token,
           },
         body: JSON.stringify({
             title: title,
             description: description,
             creation_date: formatDate(),
             end_date: tday,
+           
       })
 
     }).then((response) => {
@@ -73,7 +76,7 @@ export async function createProject(title,description,tday) {
 }
 
 
-export async function UpdateProject(id,title,description,tday){
+export async function UpdateProject(id,title,description,tday,token){
 
 
     console.log("in updateproject",{ id,title,description, tday });
@@ -82,12 +85,14 @@ export async function UpdateProject(id,title,description,tday){
         headers: {
             Accept: "*/*",
             'Content-Type': "application/json",
+            "token":token,
         },
         body: JSON.stringify({
             title: title,
             description: description,
             end_date: tday,
             id: id,
+          
         })
 
     }).then((response) => {

@@ -1,5 +1,5 @@
 
-import React, { useState} from "react";
+import React, { useState,useContext} from "react";
 import "../App.css"
 import { NavLink} from "react-router-dom";
 import PropTypes from 'prop-types';
@@ -55,7 +55,7 @@ function TopNav() {
 
 
   const [value, setValue] = useState("");
-
+  
   const handleChange = (e) => {
   setValue(e.target.value);
   
@@ -68,20 +68,24 @@ function TopNav() {
       
       <Box sx={{ borderBottom: 0,  marginLeft: 1,}}> 
        
+        
         <Tabs value={value} onChange={handleChange} aria-label="top navigation tabs" sx={{ color: "white" }}>
-          <NavLink to="/login">
-            <Tab label="Login" {...a11yProps(0)} sx={{ ...commonStyles, borderRight: 1 }} />
+          <NavLink to="/"> 
+            <Tab label="Home"  {...a11yProps(0)} sx={{ ...commonStyles, borderRight: 1 }}/>
           </NavLink>
-       
+          <NavLink to="/login">
+            <Tab label="Login" {...a11yProps(1)} sx={{ ...commonStyles, borderRight: 1 }} />
+          </NavLink>
+          
           <NavLink to="/teams">
-              <Tab label="Teams" {...a11yProps(1)} sx={{...commonStyles,borderRight:1 }} />
+              <Tab label="Teams" {...a11yProps(2)} sx={{...commonStyles,borderRight:1 }} />
           </NavLink>
       
           <NavLink to="/tasks">
-            <Tab label="Tasks" {...a11yProps(2)} sx={{ ...commonStyles, borderRight: 1 }} />
+            <Tab label="Tasks" {...a11yProps(3)} sx={{ ...commonStyles, borderRight: 1 }} />
           </NavLink>
           <NavLink to="/projects">
-             <Tab label="Projects" {...a11yProps(3)} sx={{...commonStyles,}} />
+             <Tab label="Projects" {...a11yProps(4)} sx={{...commonStyles,}} />
           </NavLink>
          
       </Tabs>

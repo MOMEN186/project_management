@@ -6,15 +6,20 @@ import {
   TableRow,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { getProjects } from "../../controllers/ProjectsController";
+import { cookiesContext } from "../../App";
 
-export default function Projects() {
+export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
-
+  const cookies = useContext(cookiesContext);
+  
   useEffect(() => {
+    console.log({cookies});
+    const token = cookies.get("token");
+
     async function getData() {
-      const result = await getProjects();
+      const result = await getProjects(token);
 
       setProjects(result);
     }

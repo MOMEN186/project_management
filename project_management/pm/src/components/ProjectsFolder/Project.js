@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
     Box,
     FormControl,
@@ -25,6 +25,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import "../../App.css";
 import dayjs from "dayjs";
+import { cookiesContext } from "../../App";
 
 function Project() {
 
@@ -34,9 +35,10 @@ function Project() {
     const [title, setTitle] = useState(location.state.title);
     const [description, setDescription] = useState(location.state.descrip);
     const [tday, setTday] = useState(dayjs(location.state.end_date));
-
+    const cookies = useContext(cookiesContext);
+    
     const handleSubmit = () => {
-        UpdateProject(location.state.id,title, description,tday.format("YYYY-MM-DD"));
+        UpdateProject(location.state.id, title, description, tday.format("YYYY-MM-DD"), cookies.get("token"));
     };
 
     return (

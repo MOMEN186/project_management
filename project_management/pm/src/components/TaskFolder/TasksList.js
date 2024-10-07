@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import {getTasks,deleteTask} from "../../controllers/TaskController";
 import { NavLink } from "react-router-dom";
 import {
@@ -10,13 +10,15 @@ import {
   Box,
 } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { cookiesContext } from "../../App";
 
 function TasksList() {
   const [tasks, setTasks] = useState([]);
+  const cookies = useContext(cookiesContext);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const fetchedTasks = await getTasks();
+      const fetchedTasks = await getTasks(cookies.get("token"));
       setTasks(fetchedTasks);
     };
 

@@ -1,12 +1,13 @@
 import { formatDate } from "./dateController";
 
-export async function getTasks() {
+export async function getTasks(token) {
 
   const response = await fetch("http://localhost:8080/tasks", {
     method: "GET", // Corrected to lowercase
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
+      "token": token
     },
   });
 
@@ -14,10 +15,10 @@ export async function getTasks() {
   return data;
 }
 
-export async function deleteTask(task_id) {
+export async function deleteTask(task_id,token) {
   const id = JSON.stringify({ id: task_id });
 
-  const response = await fetch("http://localhost:8080/tasks", {
+  await fetch("http://localhost:8080/tasks", {
     method: "DELETE",
     headers: {
       Accept: "*/*",
@@ -26,16 +27,17 @@ export async function deleteTask(task_id) {
     body: id,
   });
 
-  const data = await response.json();
+ 
 }
 
-export async function createTask(project_id, title, description, tday, status) {
+export async function createTask(project_id, title, description, tday, status,token) {
   
   await  fetch("http://localhost:8080/tasks/", {
     method: "POST",
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
+      "token":token,
     },
     body: JSON.stringify({
       title: title,
@@ -62,12 +64,13 @@ export async function createTask(project_id, title, description, tday, status) {
 }
 
 
-export async function updateTask(project_id,title,description,tday,status,id) {
+export async function updateTask(project_id,title,description,tday,status,id,token) {
   await fetch("http://localhost:8080/tasks/", {
       method: "PUT",
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
+        "token":token,
       },
       body: JSON.stringify({
         title: title,
@@ -78,5 +81,6 @@ export async function updateTask(project_id,title,description,tday,status,id) {
         project_id
         
       }),
-    });
+  });
+  
 }

@@ -2,7 +2,7 @@ import { Button, Table, TableCell, TableContainer, TableRow } from "@mui/materia
 import { NavLink } from "react-router-dom";
 
 
-function Teams() {
+function TeamsList() {
     
     return (
 
@@ -28,4 +28,4 @@ function Teams() {
 }
 
 
-export default Teams;
+export default TeamsList;
