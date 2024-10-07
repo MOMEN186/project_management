@@ -36,10 +36,7 @@ function Task() {
   const [tday, setTday] = useState(dayjs(location.state?.end_date || new Date()));
   const [status, setStatus] = useState(location.state?.status || "todo");
   const [projects, setProjects] = useState([]);
-  const [current_project, setCurrent_project] = useState({
-    id: location.state?.id || "",
-    title: '',
-  });
+  const [currentProjectId, setCurrentProjectId] = useState(location.state?.id || "",);
   const newTask = location.state?.id || 0;
   const cookies = useContext(cookiesContext);
   
@@ -51,13 +48,13 @@ function Task() {
 
     fetchProjects();
 
-  }, [current_project.id]);
+  }, [currentProjectId]);
 
   
   const handleSubmit = async (e) => {
-    if (newTask)createTask(current_project.id,title,description,tday,status,cookies.get("token"))
+    if (newTask)createTask(currentProjectId.id,title,description,tday,status,cookies.get("token"))
       else
-     updateTask(current_project.id,title, description, tday, status,location.state.id,cookies.get("token"));
+     updateTask(currentProjectId.id,title, description, tday, status,location.state.id,cookies.get("token"));
   };
 
   return (
@@ -88,10 +85,10 @@ function Task() {
                 <TableCell>
                   <FormControl fullWidth >
                     <Select
-                      value={current_project.id ||""}
+                      value={currentProjectId.id ||""}
                       onChange={(e) => {
                         const selected_project = projects.find(p => p.id === e.target.value);
-                        setCurrent_project({
+                        setCurrentProjectId({
                           id: selected_project.id,
                           title:selected_project.title,
                         });
