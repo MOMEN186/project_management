@@ -15,23 +15,33 @@ export async function getTasks(token) {
   return data;
 }
 
-export async function deleteTask(task_id,token) {
-  const id = JSON.stringify({ id: task_id });
+export async function deleteTask(id,token) {
 
+  let responseStatus = 0;
   await fetch("http://localhost:8080/tasks", {
     method: "DELETE",
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
+      "token": token,
     },
-    body: id,
+    body: JSON.stringify({
+      id:id
+    }),
+  }).then((response) => {
+    console.log({response})
+    if (!response.ok) {
+      throw new Error("error");
+    }
+    responseStatus = 200;
   });
-
+  console.log({responseStatus})
+  return responseStatus;
  
 }
 
 export async function createTask(project_id, title, description, tday, status,token) {
-  
+  console.log({project_id})
   await  fetch("http://localhost:8080/tasks/", {
     method: "POST",
     headers: {

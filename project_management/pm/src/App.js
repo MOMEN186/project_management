@@ -8,9 +8,7 @@ import Homepage from "./components/Homepage";
 import TopNav from "./components/TopNav";
 import TasksList from "./components/TaskFolder/TasksList";
 import Task from "./components/TaskFolder/Task";
-import TaskForm from "./components/TaskFolder/TaskForm";
 import ProjectsList from "./components/ProjectsFolder/ProjectsList";
-import ProjectForm from "./components/ProjectsFolder/ProjectForm";
 import Project from "./components/ProjectsFolder/Project";
 import Team from "./components/TeamsFolder/Teams";
 import TeamsForm from "./components/TeamsFolder/TeamsForm";
@@ -21,9 +19,6 @@ export const  cookiesContext = createContext();
 const cookies=new Cookies();
 
 function App() {
-
-
-
 
 
   return (
@@ -41,7 +36,7 @@ function App() {
         <Route path="/addtask" element={<Task />} />
 
         <Route path="/projects" element={<ProjectsList />} />
-        <Route path="/addproject" element={<ProjectForm />} />
+        <Route path="/addproject" element={<Project />} />
         <Route path="projects/:id" element={<Project />} />
 
         <Route path="/teams" element={<TeamsList />} />

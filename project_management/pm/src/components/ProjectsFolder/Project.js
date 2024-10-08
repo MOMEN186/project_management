@@ -3,12 +3,9 @@ import {
     Box,
     FormControl,
     FormHelperText,
-    //   InputLabel,
-    //   MenuItem,
-    //   Select,
 } from "@mui/material";
 import { TableContainer, Table, TableRow, TableCell } from "@mui/material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ThemeProvider } from "@mui/material/styles";
 import {
@@ -18,29 +15,37 @@ import {
     StyledDatePicker,
     StyledTextField,
 } from "../TaskFolder/styled/TaskFormStyled";
-import { UpdateProject } from "../../controllers/ProjectsController";
+import { UpdateProject,createProject, deleteProject } from "../../controllers/ProjectsController";
 import Button from "@mui/material/Button";
-import { NavLink ,useLocation} from "react-router-dom";
+import { NavLink ,useLocation, useNavigate} from "react-router-dom";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import "react-quill/dist/quill.snow.css"; 
 import "../../App.css";
-import dayjs from "dayjs";
 import { cookiesContext } from "../../App";
-
+import dayjs from "dayjs";
 function Project() {
 
 
     const location = useLocation();
 
-    const [title, setTitle] = useState(location.state.title);
-    const [description, setDescription] = useState(location.state.descrip);
-    const [tday, setTday] = useState(dayjs(location.state.end_date));
+    const [title, setTitle] = useState(location.state?.title || "");
+    const [description, setDescription] = useState(location.state?.descrip || "");
+    const [tday, setTday] = useState(dayjs(location.state?.end_date || new Date()));
+    const projectId = location.state?.id || 0;
+    const navigate = useNavigate();
     const cookies = useContext(cookiesContext);
     
-    const handleSubmit = () => {
-        UpdateProject(location.state.id, title, description, tday.format("YYYY-MM-DD"), cookies.get("token"));
-    };
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        let responseStatus=0;
+        if (!projectId)
+            responseStatus = await createProject(title, description, tday.format("YYYY-MM-DD"), cookies.get("token"));
+        else
+            responseStatus = await UpdateProject(location.state.id, title, description, tday, cookies.get("token"), cookies.get("token"));
 
+        if (responseStatus === 200) navigate("/projects");
+    };
+   
     return (
         <ThemeProvider theme={theme}>
             <Box component="form" sx={{ color: "white", padding: "20px" }} noValidate>
