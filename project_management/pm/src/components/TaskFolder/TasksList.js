@@ -25,9 +25,10 @@ function TasksList() {
     fetchTasks();
   }, []);
 
-  const handelDelete=(task_id) => {
-    deleteTask(task_id);
-
+  const handelDelete=async(task_id) => {
+    const responseStatus = await deleteTask(task_id,cookies.get("token"));
+    console.log({ responseStatus });
+    if(responseStatus===200)window.location.reload(); 
   }
 
 

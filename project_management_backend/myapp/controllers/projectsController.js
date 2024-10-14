@@ -1,4 +1,3 @@
-const moment = require("moment");
 const db = require("../db");
 
 
@@ -20,24 +19,6 @@ const getAllProjects = async (req, res) => {
     
 }
 
-const getProjectByID = async (req, res) => {
-    
-    const id = req.params.id;
-    console.log("in get project by id",{id})
-    try {
-        const result = await db.query(`
-        select * from projects
-        where id=$1
-        `, [id,]);
-
-        res.status(200).json({ "result": result.rows });
-    }
-    
-    catch (err) {
-
-    }
-
-}
 
 
 const createProject = async (req, res) => {
@@ -99,6 +80,27 @@ const updateProject = async (req, res) => {
 
 }
 
-module.exports={getAllProjects, createProject, updateProject,getProjectByID}
+
+const deleteProject = async (req, res) => {
+    const body = req.body;
+    const id = body["id"];
+    // console.log("in delete projects",id);
+
+    try {
+        const result = await db.query(`
+            delete from projects
+            where id=$1
+        `, [id]);
+        res.status(200).json("projects deleted successfully")
+    }
+    catch (e) {
+        console.log({ e });
+        res.status(400).json("cant delete project")
+    }
+
+
+} 
+
+module.exports={getAllProjects, createProject, updateProject,deleteProject}
 
 

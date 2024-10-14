@@ -28,6 +28,7 @@ import dayjs from "dayjs";
 import { getProjects } from "../../controllers/ProjectsController";
 import { updateTask,createTask } from "../../controllers/TaskController";
 import { cookiesContext } from "../../App";
+
 function Task() {
   const location = useLocation();
 
@@ -36,13 +37,12 @@ function Task() {
   const [tday, setTday] = useState(dayjs(location.state?.end_date || new Date()));
   const [status, setStatus] = useState(location.state?.status || "todo");
   const [projects, setProjects] = useState([]);
-  const [current_project, setCurrent_project] = useState({
-    id: location.state?.id || "",
-    title: '',
-  });
+  const [currentProjectId, setCurrentProjectId] = useState(location.state?.project_id || "",);
   const newTask = location.state?.id || 0;
+
   const cookies = useContext(cookiesContext);
-  
+  console.log({ currentProjectId ,newTask});
+
   useEffect(() => {
     async function fetchProjects() {
       const result = await getProjects(cookies.get("token"));
@@ -51,13 +51,14 @@ function Task() {
 
     fetchProjects();
 
-  }, [current_project.id]);
+  }, [currentProjectId]);
 
   
+  
   const handleSubmit = async (e) => {
-    if (newTask)createTask(current_project.id,title,description,tday,status,cookies.get("token"))
+    if (!newTask)createTask(currentProjectId,title,description,tday,status,cookies.get("token"))
       else
-     updateTask(current_project.id,title, description, tday, status,location.state.id,cookies.get("token"));
+     updateTask(currentProjectId,title, description, tday, status,location.state.id,cookies.get("token"));
   };
 
   return (
@@ -88,13 +89,11 @@ function Task() {
                 <TableCell>
                   <FormControl fullWidth >
                     <Select
-                      value={current_project.id ||""}
+                      defaultValue={""}
+                      value={currentProjectId||""}
                       onChange={(e) => {
                         const selected_project = projects.find(p => p.id === e.target.value);
-                        setCurrent_project({
-                          id: selected_project.id,
-                          title:selected_project.title,
-                        });
+                        setCurrentProjectId( selected_project.id,);
                       }}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"

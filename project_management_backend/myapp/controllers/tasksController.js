@@ -97,9 +97,8 @@ const createTask= async (req, res) => {
 const deleteTask = async (req, res) => {
   console.log("in delete task");
   const body = req.body;
-  console.log({body})
   const task_id = body["id"];
-  console.log({ task_id });
+  console.log({body} );
   
   try {
     const result = db.query(`
@@ -107,7 +106,7 @@ const deleteTask = async (req, res) => {
 
       where id=$1
     
-    
+
     `, [task_id])
 
       res.status(200).json({"message":"task deleted successfully"})
