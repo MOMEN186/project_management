@@ -32,33 +32,43 @@ import { cookiesContext } from "../../App";
 function Task() {
   const location = useLocation();
 
-  const [title, setTitle] = useState(location.state?.title || "");
-  const [description, setDescription] = useState(location.state?.descrip || "");
-  const [tday, setTday] = useState(dayjs(location.state?.end_date || new Date()));
-  const [status, setStatus] = useState(location.state?.status || "todo");
-  const [projects, setProjects] = useState([]);
-  const [currentProjectId, setCurrentProjectId] = useState(location.state?.project_id || "",);
-  const newTask = location.state?.id || 0;
-
   const cookies = useContext(cookiesContext);
-  console.log({ currentProjectId ,newTask});
+  const [user,] = useState(cookies.get("user"));
+  const [token,] = useState(user.token);
+  const [taskDetails,setTaskDetails] = useState({
+    title: location.state?.title || "",
+    description: location.state?.descrip || "",
+    tday: dayjs(location.state?.end_date || new Date()),
+    status: location.state?.status || "todo",
+    projectId: location.state?.project_id || "",
+    id: location.state?.id || "",
+    assignee_id:user?.id || ""
+  })
 
+  const [projects, setProjects] = useState([""]);
+  
+  const newTask = taskDetails.id || 0;
+
+  
   useEffect(() => {
+    console.log("in task", token)
+
     async function fetchProjects() {
-      const result = await getProjects(cookies.get("token"));
-      setProjects(result);
+      const result = await getProjects(token);
+      setProjects(result?.length ? result : []);
     }
 
     fetchProjects();
 
-  }, [currentProjectId]);
+  }, [taskDetails.projectId]);
 
   
   
   const handleSubmit = async (e) => {
-    if (!newTask)createTask(currentProjectId,title,description,tday,status,cookies.get("token"))
+     console.log({newTask})
+    if (!newTask)createTask(taskDetails,token)
       else
-     updateTask(currentProjectId,title, description, tday, status,location.state.id,cookies.get("token"));
+     updateTask(taskDetails,token);
   };
 
   return (
@@ -78,9 +88,9 @@ function Task() {
                   <StyledTextField
                     variant="outlined"
                     label="Title"
-                    value={title}
+                    value={taskDetails.title}
                     onChange={(e) => {
-                      setTitle(e.target.value);
+                      setTaskDetails({...taskDetails,title:e.target.value});
                     }}
                   />
                 </TableCell>
@@ -90,16 +100,17 @@ function Task() {
                   <FormControl fullWidth >
                     <Select
                       defaultValue={""}
-                      value={currentProjectId||""}
+                      value={taskDetails.projectId}
                       onChange={(e) => {
                         const selected_project = projects.find(p => p.id === e.target.value);
-                        setCurrentProjectId( selected_project.id,);
+                        setTaskDetails({...taskDetails,projectId:selected_project.id});
                       }}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="project"
                     >
-                      {projects.map((project) => (
+                      {
+                        projects.map((project) => (
                         <MenuItem  value={project.id} key={project.id}>
                           {project.title}
                         </MenuItem>
@@ -117,8 +128,10 @@ function Task() {
                       maxWidth: "350px",
                     }}
                     theme="snow"
-                    value={description}
-                    onChange={setDescription}
+                    value={taskDetails.description}
+                    onChange={
+                      (e) => { setTaskDetails({ ...taskDetails, description: e}); }
+                    }
                     modules={{
                       toolbar: [
                         ["bold", "italic", "underline", "strike"], // Text styling
@@ -140,10 +153,10 @@ function Task() {
                     <Select
                       labelId="demo-simple-select-helper-label"
                       id="demo-simple-select-helper"
-                      value={status}
+                      value={taskDetails.status}
                       onChange={(e) => {
-                        
-                        setStatus(e.target.value);
+                       
+                        setTaskDetails({...taskDetails,status:e.target.value});
                       }}>
                       <MenuItem value="todo">Todo</MenuItem>
                       <MenuItem value="In Progress">In Progress</MenuItem>
@@ -162,9 +175,10 @@ function Task() {
                 <TableCell>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <StyledDatePicker
-                      value={tday}
-                      onChange={(newValue) => {
-                        setTday(newValue)
+                      value={taskDetails.tday}
+                      onChange={(e) => {
+                        console.log({e})
+                        setTaskDetails({...taskDetails,tday:e});
                       }}
                       label="dead line"
                       slots={{

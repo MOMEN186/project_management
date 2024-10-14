@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { createContext} from "react";
+import React, { createContext } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Login from "./components/authentication/Login";
 import Signup from "./components/authentication/Signup";
@@ -11,41 +11,38 @@ import Task from "./components/TaskFolder/Task";
 import ProjectsList from "./components/ProjectsFolder/ProjectsList";
 import Project from "./components/ProjectsFolder/Project";
 import Team from "./components/TeamsFolder/Teams";
-import TeamsForm from "./components/TeamsFolder/TeamsForm";
 import TeamsList from "./components/TeamsFolder/TeamsList";
-import Cookies from 'universal-cookie';
+import Cookies from "universal-cookie";
 
-export const  cookiesContext = createContext();
-const cookies=new Cookies();
+export const cookiesContext = createContext();
+const cookies = new Cookies();
 
 function App() {
-
-
   return (
     <Router>
       <cookiesContext.Provider value={cookies}>
-      <TopNav  />
-      <Routes>
-        <Route path="/" element={<Homepage />} />
+        <TopNav />
+        <Routes>
 
-        <Route path="/login" element={<Login  />} />
-        <Route path="signup" element={<Signup />} />
+          <Route path="/" element={<><Homepage /></>}/>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-        <Route path="/tasks" element={<TasksList />} />
-        <Route path="/tasks/:id" element={<Task />} />
-        <Route path="/addtask" element={<Task />} />
+          <Route path="/tasks" element={<TasksList />} />
+          <Route path="/tasks/:id" element={<Task />} />
+          <Route path="/addtask" element={<Task />} />
 
-        <Route path="/projects" element={<ProjectsList />} />
-        <Route path="/addproject" element={<Project />} />
-        <Route path="projects/:id" element={<Project />} />
+          <Route path="/projects" element={<ProjectsList />} />
+          <Route path="/addproject" element={<Project />} />
+          <Route path="projects/:id" element={<Project />} />
 
-        <Route path="/teams" element={<TeamsList />} />
-        <Route path="/addteam" element={<TeamsForm />} />
-        <Route path="teams/:id" element={<Team />} />
+          <Route path="/teams" element={<TeamsList />} />
+          <Route path="/addteam" element={<Team />} />
+          <Route path="teams/:id" element={<Team />} />
 
-        <Route />
+          <Route />
         </Routes>
-        </cookiesContext.Provider>
+      </cookiesContext.Provider>
     </Router>
   );
 }

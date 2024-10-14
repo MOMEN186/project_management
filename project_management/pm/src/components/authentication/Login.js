@@ -22,10 +22,17 @@ function Login() {
 
     const handleSubmit = async () => {
       
-        const token = await login(email, password);
+        const result = await login(email, password);
         console.log({cookies});
-        cookies.set("token", token);
+        cookies.set("user", {
+            "email": result.email,
+            "token": result.token,
+            "username": result.username,
+            "id":result.userId
+        });
+        console.log('in Login',cookies.get("user"))
         navigate("/");
+        window.location.reload();
     }
 
 

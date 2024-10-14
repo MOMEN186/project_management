@@ -1,13 +1,15 @@
 import { formatDate } from "./dateController";
 
-export async function getTasks(token) {
+export async function getTasks(userID,token) {
 
+  console.log({userID,token})
   const response = await fetch("http://localhost:8080/tasks", {
     method: "GET", // Corrected to lowercase
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
-      "token": token
+      "token": token,
+      "user_id": userID,
     },
   });
 
@@ -40,8 +42,7 @@ export async function deleteTask(id,token) {
  
 }
 
-export async function createTask(project_id, title, description, tday, status,token) {
-  console.log({project_id})
+export async function createTask(taskDetails,token) {
   await  fetch("http://localhost:8080/tasks/", {
     method: "POST",
     headers: {
@@ -50,12 +51,13 @@ export async function createTask(project_id, title, description, tday, status,to
       "token":token,
     },
     body: JSON.stringify({
-      title: title,
-      description: description,
+      title: taskDetails.title,
+      description: taskDetails.description,
       start_date: formatDate(),
-      end_date: tday,
-      status: status,
-      project_id: project_id,
+      end_date: taskDetails.tday,
+      status: taskDetails.status,
+      project_id: taskDetails.project_id,
+      assignee_id:taskDetails.assignee_id,
     }),
   })
     .then((response) => {
@@ -74,7 +76,7 @@ export async function createTask(project_id, title, description, tday, status,to
 }
 
 
-export async function updateTask(project_id,title,description,tday,status,id,token) {
+export async function updateTask(taskDetails,token) {
   await fetch("http://localhost:8080/tasks/", {
       method: "PUT",
       headers: {
@@ -83,12 +85,12 @@ export async function updateTask(project_id,title,description,tday,status,id,tok
         "token":token,
       },
       body: JSON.stringify({
-        title: title,
-        description: description,
-        end_date: tday,
-        status: status,
-        id: id,
-        project_id
+        title: taskDetails.title,
+        description: taskDetails.description,
+        end_date: taskDetails.tday,
+        status: taskDetails.status,
+        id: taskDetails.id,
+        project_id:taskDetails.projectId
         
       }),
   });

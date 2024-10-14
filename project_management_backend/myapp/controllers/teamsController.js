@@ -3,15 +3,16 @@ const db = require("../db");
 
 
 const getAllTeams = async (req, res) => {
-    
+    console.log("in get all teams");
+    const user_id = req.headers["user_id"] || req.headers["admin_id"];
+    console.log({user_id})
     try {
        const result= await db.query(`
         
         select * from teams        
-        
-        `, []);
-
-        res.status(200).json({"result":result})
+        where user_id=$1 or adminid=$1
+        `, [user_id]);
+        res.status(200).json({"result":result.rows})
     }
     catch (err) {
         console.log({ err });
@@ -24,19 +25,22 @@ const getAllTeams = async (req, res) => {
 
 const createTeam = async (req, res) => {
 
-    const headers = req.headers;
-    const name = headers["name"];
-    let creation_date = headers["creation_date"];
-    console.log({creation_date})
+    console.log("in create team");
+
+    const body = req.body;
+    const team_name = body["team_name"];
+    let creation_date = body["creation_date"];
+    const admin_id = body["admin_id"];
+    console.log({ team_name,admin_id,creation_date });
 
     creation_date = moment(creation_date).format("YYYY-MM-DD HH:MM:SS");
     console.log({creation_date})
     try {
         
         await db.query(`
-            insert into teams(team_name,creation_date)
+            insert into teams(team_name,adminid)
             values($1,$2)
-        `, [name,creation_date]);
+        `, [team_name,admin_id]);
 
         res.status(200).json({ "message": "team created successfully" });
     }
@@ -51,43 +55,107 @@ const createTeam = async (req, res) => {
 
 
 const updateTeam = async (req, res) => {
-    
-    const headers=req.headers;
-    const id = headers["id"];
-    const column =JSON.parse( headers["column"]);
-    const key = Object.keys(column)[0];
-    const value = column[key];
-
-    if (key === 'team_name') {
+    console.log("in update team")
+    const body=req.body;
+    const id = body["id"];
+    const team_name = body["team_name"];
+    const user = body["admin_id"] || body["user_id"];
+    const participants = body["participants"];
+    console.log({id,team_name,user,participants})
         try {
           const result=  await db.query(`
                 update teams
-                set ${key}=$1
+                set team_name=$1
                 where id=$2
-            `, [value, id]);
-            res.status(200).json({ "message": "team modified successfully", "result": result });
-            return res.end();
-            
-        }
+            `, [team_name, id]);
 
+            addMembers(id, participants.map((participant)=>participant.id));
+
+        
+            res.status(200).json({ "message": "team modified successfully", "result": result });
+        }
+        
+          
         catch (err) {
             console.log({ err });
-            res.status(304).json({ "message": "not modified" });
-           return res.end();
+           return res.status(304).json({ "message": "not modified" });
+        
         }
+    
+
+  
+}
+
+
+const getAllUsers =async (req,res) => {
+    const team_id = req.headers.team_id;
+   
+    try {
+        const result = await db.query(`
+        select * from users
+        where id not in (
+            select user_id from teams_users
+            where team_id=$1
+        )
+        `, [team_id]);
+        console.log(result.rows)
+        console.log({ team_id })
+        res.status(200).json(result.rows);
     }
 
-    res.status(403).json({ "message": "Forbidden" });
+    catch (e) {
+        res.status(400).json("cant get users")
+        console.log("cant get users",{ e });
+    }
+
+}
+
+
+const addMembers = async (team_id, users_id) => {
+            
+    
+    users_id.forEach(async (user_id) => {
+            
+                console.log("in user_id foreach",user_id)
+        const result = await db.query(`
+        
+                insert into teams_users(user_id,team_id)
+                values($1,$2)
+                on conflict(user_id,team_id)
+                do nothing
+            `, [user_id, team_id])
+        
+
+    });
+    
+
+
+}
+
+const getTeamMembers = async (req, res) => {
   
+    const headers = req.headers;
+    const team_id = headers.team_id
+    try {
+        
+        const result = await db.query(`
+        
+            select user_id,username,email from teams_users 
+            inner join users on users.id = teams_users.user_id
+            where team_id=$1
+        `, [team_id]);
+        
+        res.status(200).json(result.rows);
+    }
+    catch (e) {
+        console.log({ e });
+        res.status(400);
+
+    }
+
 }
 
 
 
 
-
-
-
-
-
-
-module.exports={getAllTeams,createTeam,updateTeam}
+module.exports = { getAllTeams, createTeam, updateTeam, getAllUsers ,getTeamMembers};

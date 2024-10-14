@@ -3,8 +3,13 @@ const db = require("../db");
 
 const getAllTasks =  async (req, res) => {
   console.log("in get all tasks");
+  const user_id = req.headers.user_id;
+
     try {
-      const result = await db.query("select * from tasks");
+      const result = await db.query(`
+      select * from tasks
+      where assigneeid=$1
+      `,[user_id]);
       res.status(200).json(result.rows);
     }
     catch (e) {
@@ -25,6 +30,7 @@ const createTask= async (req, res) => {
   const status = body["status"];
   const title = body["title"];
   const project_id = body["project_id"];
+  const assignee_id = body["assignee_id"];
   let start_date = (body["start_date"]);
   let end_date = (body["end_date"]);
   console.log({descrip, status, start_date,end_date})
@@ -36,9 +42,9 @@ const createTask= async (req, res) => {
     try {
       // insert into table
       const result = await db.query(`
-        insert into tasks(descrip,status,start_date,end_date,title,project_id)
-        values($1,$2,$3,$4,$5,$6)
-      `, [descrip, status, start_date, end_date,title,project_id]);
+        insert into tasks(descrip,status,start_date,end_date,title,project_id,assigneeid)
+        values($1,$2,$3,$4,$5,$6,$7)
+      `, [descrip, status, start_date, end_date,title,project_id,assignee_id]);
       res.status(200).json({ "message": "ok"});
   
     }

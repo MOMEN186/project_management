@@ -4,20 +4,7 @@ function Homepage({ user }) {
   return (
     <div>
       
-      {
-        user ? (
-        <nav className="navbar">
-          Manage Your Projects
-          <div className="section">planning</div>
-        </nav>
-      ) : (
-        
-        <NavLink to="/login">
-          {/* <button className="loginbtn">
-            Login
-          </button> */}
-        </NavLink>
-      )}
+  
     </div>
   );
 }

@@ -15,18 +15,22 @@ import { cookiesContext } from "../../App";
 function TasksList() {
   const [tasks, setTasks] = useState([]);
   const cookies = useContext(cookiesContext);
+  const [user,] = useState(cookies.get("user"));
+  const [token,] = useState(user.token);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const fetchedTasks = await getTasks(cookies.get("token"));
+      console.log("in task list ",token)
+      const fetchedTasks = await getTasks(user.id,token);
       setTasks(fetchedTasks);
+      console.log({tasks})
     };
 
     fetchTasks();
   }, []);
 
   const handelDelete=async(task_id) => {
-    const responseStatus = await deleteTask(task_id,cookies.get("token"));
+    const responseStatus = await deleteTask(task_id,token);
     console.log({ responseStatus });
     if(responseStatus===200)window.location.reload(); 
   }
@@ -47,7 +51,7 @@ function TasksList() {
           
         
           {
-                  tasks.map((task) => {
+              tasks.map((task) => {
                       return (
                           <TableRow key={task.id}>
                               <TableCell>

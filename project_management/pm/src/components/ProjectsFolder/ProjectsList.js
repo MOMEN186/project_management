@@ -17,14 +17,14 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
   const cookies = useContext(cookiesContext);
-  const navigate = useNavigate();
+  const [user,] = useState(cookies.get("user"));
+  const [token,] = useState(user.token);
   useEffect(() => {
-    console.log({ cookies });
-    const token = cookies.get("token");
 
     async function getData() {
-      const result = await getProjects(token);
-
+      console.log({token})
+      const result = await getProjects(user.id,token);
+      
       setProjects(result);
     }
 
@@ -32,7 +32,7 @@ export default function ProjectsList() {
   }, []);
 
   const handelDelete = async (id) => {
-    const responseStatus = await deleteProject(id, cookies.get("token"));
+    const responseStatus = await deleteProject(id, token);
     console.log({responseStatus})
     if (responseStatus === 200)  window.location.reload(); 
   };
@@ -48,29 +48,30 @@ export default function ProjectsList() {
           </TableCell>
         </TableRow>
 
-        {projects.map((project) => (
-          <TableRow>
-            <TableCell>
-              <NavLink
-                to="/projects/:id"
-                style={{ color: "white" }}
-                state={project}
-              >
-                <Button sx={{ color: "white" }}>{project.title}</Button>
-              </NavLink>
-            </TableCell>
-            <TableCell>
-              <Button
-                sx={{ color: "white" }}
-                onClick={() => {
-                  handelDelete(project.id);
-                }}
-              >
-                <DeleteOutlineIcon fontSize="small" />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {
+            (projects.map((project) => (
+            <TableRow>
+              <TableCell>
+                <NavLink
+                  to="/projects/:id"
+                  style={{ color: "white" }}
+                  state={project}
+                >
+                  <Button sx={{ color: "white" }}>{project.title}</Button>
+                </NavLink>
+              </TableCell>
+              <TableCell>
+                <Button
+                  sx={{ color: "white" }}
+                  onClick={() => {
+                    handelDelete(project.id);
+                  }}
+                >
+                  <DeleteOutlineIcon fontSize="small" />
+                </Button>
+              </TableCell>
+            </TableRow>)
+                      ))}
       </Table>
     </TableContainer>
   );
