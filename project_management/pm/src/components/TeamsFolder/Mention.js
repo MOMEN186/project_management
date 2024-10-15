@@ -1,4 +1,3 @@
-import { Autocomplete, Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { getAllUsers } from "../../controllers/TeamsController";
 import { cookiesContext } from "../../App";
@@ -8,7 +7,6 @@ import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { autocompleteClasses } from "@mui/material/Autocomplete";
 import useAutocomplete from "@mui/material/useAutocomplete";
-import MembersList from "./MembersList";
 
 const Root = styled("div")(
   ({ theme }) => `
@@ -30,7 +28,7 @@ const Label = styled("label")`
 const InputWrapper = styled("div")(
   ({ theme }) => `
     width: 300px;
-    border: 1px solid ${theme.palette.mode === "dark" ? "#434343" : "#d9d9d9"};
+    border: 1px solid ${theme.palette.mode === "dark" ? "white" : "white"};
     background-color: ${theme.palette.mode === "dark" ? "#141414" : "#fff"};
     border-radius: 4px;
     padding: 1px;
@@ -38,11 +36,11 @@ const InputWrapper = styled("div")(
     flex-wrap: wrap;
   
     &:hover {
-      border-color: ${theme.palette.mode === "dark" ? "#177ddc" : "#40a9ff"};
+      border-color: ${theme.palette.mode === "dark" ? "white" : "white"};
     }
   
     &.focused {
-      border-color: ${theme.palette.mode === "dark" ? "#177ddc" : "#40a9ff"};
+      border-color: ${theme.palette.mode === "dark" ? "white" : "white"};
       box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
     }
   
@@ -89,7 +87,7 @@ const StyledTag = styled(Tag)(
     margin: 2px;
     line-height: 22px;
     background-color: ${
-      theme.palette.mode === "dark" ? "rgba(255,255,255,0.08)" : "#fafafa"
+      theme.palette.mode === "dark" ? "white" : "white"
     };
     border: 1px solid ${theme.palette.mode === "dark" ? "#303030" : "#e8e8e8"};
     border-radius: 2px;
@@ -99,9 +97,9 @@ const StyledTag = styled(Tag)(
     overflow: hidden;
   
     &:focus {
-      border-color: ${theme.palette.mode === "dark" ? "#177ddc" : "#40a9ff"};
+      border-color: ${theme.palette.mode === "dark" ? "white" : "white"};
       background-color: ${
-        theme.palette.mode === "dark" ? "#003b57" : "#e6f7ff"
+        theme.palette.mode === "dark" ? "white" : "white"
       };
     }
   
