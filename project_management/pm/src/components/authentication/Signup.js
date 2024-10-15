@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { signup } from "../../controllers/authController";
 export default function Signup() {
   
@@ -18,11 +18,12 @@ export default function Signup() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     
     await signup(first_name, last_name, email, password);
-
+    navigate("/login");
   }
 
   return (

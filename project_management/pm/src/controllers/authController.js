@@ -26,7 +26,7 @@ export async function signup(first_name, last_name, email, password) {
 
 export async function login(email, password) {
     
-    let token = "";
+    let result = "";
 
     await fetch("http://localhost:8080/auth/login", {
         method: "POST",
@@ -45,14 +45,29 @@ export async function login(email, password) {
         }
         return response.json();
     }).then((data) => {
-        token = data;
-        console.log({ token });
+        result = data;
+        console.log({ data });
         
     });
-    return token;
+    
+    return result;
 }
 
 
-export async function isAuth() {
-    
+export async function Logout(userID,token) {
+        
+    await fetch("http://localhost:8080/auth/logout", {
+        method: "POST",
+        headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            token:token
+        },
+        body: JSON.stringify({
+            userID:userID,
+        })
+    }
+    )
+   
+
 }

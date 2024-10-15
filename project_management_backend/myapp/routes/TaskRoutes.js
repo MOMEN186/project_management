@@ -4,7 +4,7 @@ const tasksController= require("../controllers/tasksController");
 const tasksRouter = express.Router();
 
 tasksRouter.get("/", tasksController.getAllTasks);
-// tasksRouter.get("/projectID", tasksController.getprojectByID)
+ tasksRouter.get("/:id", tasksController.getTaskByID)
 tasksRouter.post("/", tasksController.createTask);
 tasksRouter.put("/", tasksController.updateTask);
 tasksRouter.delete("/", tasksController.deleteTask);

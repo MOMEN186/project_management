@@ -2,7 +2,7 @@ var express = require('express');
 const app = express();
 const cors = require("cors");
 const {authMiddleWare} = require("./middlewares/authMiddleWare")
-
+const db = require("./db");
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const dotenv = require("dotenv");
@@ -36,6 +36,7 @@ app.use("/users", authMiddleWare, usersRouter);
 app.use("/auth", authRouter);
 
 
+db.startCleanUpJob();
 
 app.listen(8080, () => {
   console.log(`server is listening on port 8080`);
