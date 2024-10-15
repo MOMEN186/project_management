@@ -125,7 +125,28 @@ const deleteTask = async (req, res) => {
   }
 
 
-  } 
+} 
+  
+
+const getTaskByID = async (req,res) => {
+  
+  const id = req.params.id;
+  console.log("in get task by id",{id})
+  try {
+    console.log("in try ",id)
+    const result = await db.query(`
+      select * from tasks 
+      where id=$1
+    `,[id]);
+    console.log(result.rows[0])
+    res.status(200).json(result.rows[0]);
+  }
+catch (e) {
+    console.log(e);
+    res.status(400).json("cant get project by the specified id")
+}
+
+}
 
 
-  module.exports = { getAllTasks, createTask, updateTask ,deleteTask};
+module.exports = { getAllTasks, createTask, updateTask, deleteTask, getTaskByID };

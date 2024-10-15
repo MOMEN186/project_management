@@ -76,8 +76,7 @@ async function login(req, res) {
     while (!isBlackListed(token)) {
       token = genToken();
     }
-
-    return res.status(200).json({ token, userId, email, username });
+     res.status(200).json({...result.rows[0], token: token});
 
   } catch (e) {
     console.log({ e });

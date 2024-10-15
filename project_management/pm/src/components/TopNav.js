@@ -1,13 +1,17 @@
-import React, { useState, useContext, useEffect,useCallback } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import "../App.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
+
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { cookiesContext } from "../App";
-import { Button } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { Logout } from "../controllers/authController";
+// import PersonPinIcon from "@mui/icons-material/PersonPin";
+import TabContext from "@mui/lab/TabContext";
+
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -56,7 +60,7 @@ function TopNav() {
   const [user, setUser] = useState(cookies.get("user"));
   const [token, setToken] = useState(user?.token || "");
   const navigate = useNavigate();
-
+  const { pathname } = useLocation();
 
   const handleChange = (e) => setValue(e.target.value);
 
@@ -64,7 +68,7 @@ function TopNav() {
     await Logout(user.id, token);
     cookies.remove("user");
     setToken(null);
-    console.log("logged out", cookies)
+    console.log("logged out", cookies);
     navigate("/");
   };
 
@@ -74,13 +78,13 @@ function TopNav() {
     if (!token) {
       navigate("/login");
     }
-    
-  }, [cookies,token]);
+  }, [cookies, token]);
 
   return (
     <Box
+      
       sx={{
-        width: "100%",
+        width: "200vh",
         display: "flex",
         justifyContent: "center",
         alignContent: "center",
@@ -88,72 +92,70 @@ function TopNav() {
     >
       <Box sx={{ borderBottom: 0, marginLeft: 1 }}>
         <Tabs
-          value={value}
           onChange={handleChange}
           aria-label="top navigation tabs"
           sx={{ color: "white" }}
+          value={pathname}
         >
-          <NavLink to="/">
-            <Tab
-              label="Home"
-              {...a11yProps(0)}
-              sx={{ ...commonStyles, borderRight: 1 }}
-            />
-          </NavLink>
-        
+          <Tab
+            label="Home"
+            {...a11yProps(0)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/"
+            value="/"
+          />
 
-          <NavLink to="/teams">
-            <Tab
-              label="Teams"
-              {...a11yProps(2)}
-              sx={{ ...commonStyles, borderRight: 1 }}
-            />
-          </NavLink>
+          <Tab
+            label="Teams"
+            {...a11yProps(1)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/teams"
+            value="/teams"
+          />
 
-          <NavLink to="/tasks">
-            <Tab
-              label="Tasks"
-              {...a11yProps(3)}
-              sx={{ ...commonStyles, borderRight: 1 }}
-            />
-          </NavLink>
-          <NavLink to="/projects">
-            <Tab label="Projects" {...a11yProps(4)} sx={{ ...commonStyles }} />
-          </NavLink>
+          <Tab
+            label="Tasks"
+            {...a11yProps(2)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/tasks"
+            value="/tasks"
+          />
+
+          <Tab
+            label="Projects"
+            {...a11yProps(3)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/projects"
+            value="/projects"
+          />
 
           {token && (
-            <Button onClick={handleLogout}>
-              <Tab
-                label="Logout"
-                {...a11yProps(1)}
-                sx={{ ...commonStyles, borderRight: 1 }}
-              />
-            </Button>
+            <Tab
+              label="Logout"
+              {...a11yProps(4)}
+              sx={{ ...commonStyles }}
+              onClick={handleLogout}
+            />
           )}
+
+          <Tab
+            sx={{ bgcolor: "black", color: "white" }}
+            {...a11yProps(5)}
+            aria-label="person"
+            to="/profile"
+            value="/profile"
+            component={Link}
+            state={user}
+            icon={<Avatar>ME</Avatar>}
+          />
         </Tabs>
       </Box>
 
-      <TabPanel value={value} index={0}>
-        Home
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Login
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Teams
-      </TabPanel>
-
-      <TabPanel value={value} index={3}>
-        Tasks
-      </TabPanel>
-
-      <TabPanel value={value} index={4}>
-        Projects
-      </TabPanel>
-
-      <TabPanel value={value} index={5}>
-        Logout
-      </TabPanel>
+      
     </Box>
   );
 }

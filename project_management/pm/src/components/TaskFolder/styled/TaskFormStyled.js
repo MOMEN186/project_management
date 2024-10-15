@@ -7,52 +7,59 @@ import { createTheme } from '@mui/material/styles';
 
 const StyledTextField = styled(TextField)(({ descriptionInput }) => ({
   "& label": {
-    color: "white",
+    color: "white", // Default label color
   },
-  "&:hover label": {
-    fontWeight: 700,
+  "& .MuiInputLabel-root": {
+    color: "white", // Ensure label is white by default
   },
-  "& label.Mui-focused": {
-    color: "white",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "white",
+  "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-shrink": {
+    color: "white", // Keep label white when focused or shrunk (floating)
+    transform: "translate(14px, -6px) scale(0.75)", // Adjust for floating position
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white",
+      borderColor: "white", // Default border color
     },
     "&:hover fieldset": {
-      borderColor: "white",
-      borderWidth: 2,
+      borderColor: "white", // Hover border color
+      borderWidth: 2, // Slightly thicker border on hover
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white",
+      borderColor: "white", // Focus border color remains white
     },
     "& .MuiInputBase-input": {
-      color: "white", // Input text color
-      backgroundColor: "black", // Black background for input
+      color: "white", // Input text color remains white
+      backgroundColor: "black", // Black background for the input
       ...(descriptionInput && {
         minHeight: "150px", // Minimum height for description field
-        height: "auto", // Set auto height if content grows
-        width: "500px", // Set desired width
+        height: "auto", // Auto height for content expansion
+        width: "500px", // Set desired width for description field
       }),
     },
   },
 }));
 
-  const StyledDatePicker = styled(DatePicker)({
-    "& .MuiInputBase-root": {
-      color: "white",  // Input text color
-      backgroundColor: "black",  // Black background for input
-    },
-    "& .MuiSvgIcon-root": {
-      color: "white"  ,// Color for the calendar icon
-      backgroundColor: "black",  // Black background for input
-  
-    },
-  });
-  
+const StyledDatePicker = styled(DatePicker)({
+  "& .MuiInputBase-root": {
+    color: "white",  // Input text color
+    backgroundColor: "black",  // Black background for input
+    width: "350px",  // Set width of the date picker input
+    paddingRight: "0px",  // Remove extra padding to ensure icon is placed right at the edge
+  },
+  "& .MuiInputAdornment-root": {
+    position: "end",  // Aligns the icon at the end of the input
+    marginRight: "15px",  // No additional right margin
+  },
+  "& .MuiSvgIcon-root": {
+    color: "white",  // Color for the calendar icon
+    backgroundColor: "black",  // Black background for input
+  },
+  "& .MuiPickersPopper-root": {
+    width: "350px",  // Ensure consistent width for the calendar pop-up dialog
+  },
+});
+
+
   
   
   const StyledButton = styled(IconButton)(({ theme }) => ({

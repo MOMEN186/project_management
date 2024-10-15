@@ -96,3 +96,21 @@ export async function updateTask(taskDetails,token) {
   });
   
 }
+
+
+export async function getTaskByID(id,token) {
+  
+ const result= await fetch(`http://localhost:8080/tasks/${id}`, {
+      method: "GET",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        "token":token,
+      },
+  
+  });
+
+  const data = result.json();
+  return data;
+
+}

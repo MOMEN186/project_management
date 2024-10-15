@@ -14,12 +14,12 @@ export async function getProjects(user,token) {
   });
 
   const data = await result.json();
-  console.log({data})
-  return data.result;
+  console.log(data)
+  return data;
 }
 
 export async function createProject(projectDetails, token) {
-  console.log({ projectDetails });
+  console.log("in create project",{ projectDetails });
   let responseStatus = 0;
 
   await fetch("http://localhost:8080/projects/", {
@@ -103,4 +103,24 @@ export async function deleteProject(id, token) {
     responseStatus = 200;
   });
   return responseStatus;
+}
+
+
+export async function getProjectByID(id, token) {
+  
+  const result = await fetch(`http://localhost:8080/projects/${id}`, {
+    method: "GET",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    },
+    
+  });
+
+
+  const data = result.json();
+  return data;
+
+
 }

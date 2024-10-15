@@ -5,13 +5,13 @@ const getAllProjects = async (req, res) => {
     console.log("in get projects");
     const headers = req.headers;
     const user = headers["manager_id"] || headers["user_id"];
-    console.log({user})
+    console.log({ user });
     try {
         const result = await db.query(`
             select * from projects
             where managerid=$1 or user_id=$1
         `, [user]);
-        res.status(200).json({ "result": result.rows });
+        res.status(200).json(result.rows.map((row)=>({"id":row.id,"title":row.title})));
     }
     catch (err) {
 
@@ -25,7 +25,6 @@ const getAllProjects = async (req, res) => {
 
 const createProject = async (req, res) => {
     
-    console.clear();
     console.log("in create project");
 
     const body = req.body;
@@ -106,6 +105,24 @@ const deleteProject = async (req, res) => {
 
 } 
 
-module.exports={getAllProjects, createProject, updateProject,deleteProject}
+const getProjectByID = async (req, res) => {
+    
+    const id = req.params.id;
+    console.log("in get project by id");
+    try {
+        const result = await db.query(`
+        select * from projects
+        where id=$1
+        `, [id]);
+        console.log(result.rows[0]);
+        res.status(200).json(result.rows[0]);
+    }
+    catch (e) {
+        console.log({ e });
+        res.status(400).json("cant get project by the specified id");
+    }
+}
+
+module.exports = { getAllProjects, createProject, updateProject, deleteProject, getProjectByID };
 
 
