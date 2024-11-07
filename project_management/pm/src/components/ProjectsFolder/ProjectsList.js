@@ -6,10 +6,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-
+  Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState, useContext } from "react";
 import {
   deleteProject,
@@ -18,7 +18,7 @@ import {
 import { cookiesContext } from "../../App";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-export default function ProjectsList() {
+export default function ProjectsList({ addProject }) {
   const [projects, setProjects] = useState([]);
   const cookies = useContext(cookiesContext);
   const [user] = useState(cookies.get("user"));
@@ -30,7 +30,7 @@ export default function ProjectsList() {
       console.log({ token });
       const result = await getProjects(user.id, token);
 
-      setProjects(result||[]);
+      setProjects(result || []);
     }
 
     getData();
@@ -39,42 +39,45 @@ export default function ProjectsList() {
   const handelDelete = async (id) => {
     const responseStatus = await deleteProject(id, token);
     console.log({ responseStatus });
-    if (responseStatus === 200) navigate("/projects")
+    if (responseStatus === 200) navigate("/projects");
   };
 
   return (
-    
     <Grid container spacing={2}>
       <Grid item xs={12} md={6}>
-        <Button component={Link} to="/addproject"
-        sx={{color:"white",marginLeft:3}}
-        
-        >
-          Add Project
-        </Button>
+        {addProject ? (
+          <Button
+            component={Link}
+            to="/addproject"
+            sx={{ color: "white", marginLeft: 3 }}
+          >
+            Add Project
+          </Button>
+        ) : (
+          <Typography marginLeft="25px">Projects</Typography>
+        )}
         <List>
           {projects.map((project) => (
             <ListItem
               sx={{ paddingRight: 10, "&:hover": { backgroundColor: "grey" } }}
-              secondaryAction={<IconButton edge="end" onClick={()=>handelDelete(project.id)}>
-                <DeleteOutlineIcon sx={{color:"white"}} fontSize="small" />
-              </IconButton>}
-              
+              secondaryAction={
+                <IconButton edge="end" onClick={() => handelDelete(project.id)}>
+                  <DeleteOutlineIcon sx={{ color: "white" }} fontSize="small" />
+                </IconButton>
+              }
             >
               <ListItemButton
-                sx={{"&:hover":{backgroundColor:"grey"}}}
-                component={Link} to={`/projects/${project.id}`} state={project}>
-              
+                sx={{ "&:hover": { backgroundColor: "grey" } }}
+                component={Link}
+                to={`/projects/${project.id}`}
+                state={project}
+              >
                 <ListItemText primary={project.title} />
-              
               </ListItemButton>
-              
-
             </ListItem>
           ))}
         </List>
       </Grid>
-      </Grid>
-   
+    </Grid>
   );
 }

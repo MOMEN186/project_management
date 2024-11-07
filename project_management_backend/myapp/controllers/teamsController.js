@@ -2,7 +2,6 @@ const moment = require('moment');
 const db = require('../db');
 
 const getAllTeams = async (req, res) => {
-  console.log('in get all teams');
   const user_id = req.headers['user_id'] || req.headers['admin_id'];
   console.log({ user_id });
   try {
@@ -91,6 +90,7 @@ const getAllUsers = async (req, res) => {
         `,
       [team_id],
     );
+    req.headers["limit"] = 5;
     console.log('getALlUSers', team_id, result.rowCount);
 
     res.status(200).json(result.rows);
@@ -123,9 +123,9 @@ const getTeamMembers = async (req, res) => {
     const result = await db.query(
       `
         
-      select user_id,username,email from teams_users 
+      select * from teams_users 
       inner join users on users.id = teams_users.user_id
-      where team_id=$1
+      where team_id=$1 
         `,
       [team_id],
     );
@@ -138,14 +138,16 @@ const getTeamMembers = async (req, res) => {
 
 const getTeamByID = async (req, res) => {
   const id = req.params.id;
+  const limit = req.headers.limit;
   console.log('--------get team by id-----------', { id });
   try {
     const result = await db.query(
       `
             select * from teams
-            where id=$1    
+            where id=$1
+            limit=$2
         `,
-      [id],
+      [id,limit],
     );
 
     if (!result.rowCount) {

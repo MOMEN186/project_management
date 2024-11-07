@@ -23,13 +23,15 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ReactQuill from "react-quill";
 import dayjs from "dayjs";
 import { getProjects } from "../../controllers/ProjectsController";
-import { updateTask, createTask, getTaskByID } from "../../controllers/TaskController";
+import {
+  updateTask,
+  createTask,
+  getTaskByID,
+} from "../../controllers/TaskController";
 import { cookiesContext } from "../../App";
 
 function Task() {
-
   const { id } = useParams();
-
 
   const cookies = useContext(cookiesContext);
   const [user] = useState(cookies.get("user"));
@@ -37,12 +39,12 @@ function Task() {
 
   const [taskDetails, setTaskDetails] = useState({
     title: "",
-    description:  "",
-    tday: dayjs( new Date()),
-    status:  "todo",
+    description: "",
+    tday: dayjs(new Date()),
+    status: "todo",
     projectId: "",
     id: id,
-    assignee_id:"",
+    assignee_id: "",
   });
 
   const [projects, setProjects] = useState([]);
@@ -51,7 +53,6 @@ function Task() {
   const newTask = taskDetails.id || 0;
 
   useEffect(() => {
-
     async function fetchProjects() {
       const result = await getProjects(user.id, token);
       setProjects(result?.length ? result : []);
@@ -61,28 +62,24 @@ function Task() {
   }, [taskDetails.projectId]);
 
   useEffect(() => {
-    
     async function fetchTaskByID() {
-        
       const result = await getTaskByID(id, token);
       setTaskDetails({
         title: result.title,
-        description:  result.descrip,
+        description: result.descrip,
         tday: dayjs(result.end_date),
-        status:  result.status,
+        status: result.status,
         projectId: result.project_id,
         id: id,
-        assignee_id:result.assignee_id,
-      })
+        assignee_id: result.assignee_id,
+      });
     }
     fetchTaskByID();
-
-  },[])
+  }, []);
 
   useEffect(() => {
-    console.log(taskDetails)
-  },[])
-
+    console.log(taskDetails);
+  }, []);
 
   const handleSubmit = async (e) => {
     if (!newTask) createTask(taskDetails, token);
@@ -106,9 +103,7 @@ function Task() {
         flexDirection="column"
         noValidate
       >
-        <Typography>
-          {id?"Edit Task":"Create Task"}
-        </Typography>
+        <Typography>{id ? "Edit Task" : "Create Task"}</Typography>
         <StyledTextField
           variant="outlined"
           label="Title"

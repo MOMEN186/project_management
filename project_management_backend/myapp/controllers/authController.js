@@ -30,7 +30,7 @@ async function signup(req, res) {
 
 async function isBlackListed(token) {
   
-  console.log("in isBlackListed");
+  
   try {
     const result = await db.query(`
       select * from blacklist
@@ -51,7 +51,7 @@ async function login(req, res) {
   const body = req.body;
   const email = body['email'];
   const password = body['password'];
-  console.log({email})
+  
   try {
     const result = await db.query(
       `
@@ -62,20 +62,20 @@ async function login(req, res) {
     );
 
     if (result.rowCount === 0) res.status(404).json('an account with this email is  not found');
-    console.log(result.rows);
     const user_password = result.rows[0].password_digest;
     const userId = result.rows[0].id;
     const username = result.rows[0].username;
     const isMatch = await  bcrypt.compare(password,user_password);
-
     if (!isMatch) res.status(400).json('incorrect password');
-      
+
+    console.log(result.rows[0].cover_photo)
     
     const genToken = () => jwt.sign({ userID: result.rows[0].id }, '2000');
     let token = genToken();
     while (!isBlackListed(token)) {
       token = genToken();
     }
+    
      res.status(200).json({...result.rows[0], token: token});
 
   } catch (e) {

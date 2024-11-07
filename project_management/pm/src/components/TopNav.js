@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../App.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -7,10 +7,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { cookiesContext } from "../App";
-import { Avatar, Button } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { Logout } from "../controllers/authController";
 // import PersonPinIcon from "@mui/icons-material/PersonPin";
-import TabContext from "@mui/lab/TabContext";
 
 function a11yProps(index) {
   return {
@@ -46,10 +45,8 @@ TabPanel.propTypes = {
 };
 
 const commonStyles = {
-  border: 1,
   width: "1rem",
   height: "1rem",
-  borderColor: "text.disabled",
   color: "white",
 };
 
@@ -96,6 +93,8 @@ function TopNav() {
           aria-label="top navigation tabs"
           sx={{ color: "white" }}
           value={pathname}
+        
+      
         >
           <Tab
             label="Home"
@@ -143,14 +142,14 @@ function TopNav() {
           )}
 
           <Tab
-            sx={{ bgcolor: "black", color: "white" }}
+            sx={{ color: "white" }}
             {...a11yProps(5)}
             aria-label="person"
             to="/profile"
             value="/profile"
             component={Link}
             state={user}
-            icon={<Avatar>ME</Avatar>}
+            icon={<Avatar sx={{width:"24px",height:"24px",fontSize:10}}>ME</Avatar>}
           />
         </Tabs>
       </Box>

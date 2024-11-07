@@ -9,7 +9,7 @@ const StyledTextField = styled(TextField)(({ descriptionInput }) => ({
   "& label": {
     color: "white", // Default label color
   },
-  "& .MuiInputLabel-root": {
+  "& .MuiInputLabel-root .MuiInputRoot": {
     color: "white", // Ensure label is white by default
   },
   "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-shrink": {
@@ -19,23 +19,45 @@ const StyledTextField = styled(TextField)(({ descriptionInput }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "white", // Default border color
+      color: "white",
     },
     "&:hover fieldset": {
       borderColor: "white", // Hover border color
       borderWidth: 2, // Slightly thicker border on hover
+      color: "white",
     },
     "&.Mui-focused fieldset": {
       borderColor: "white", // Focus border color remains white
+      color: "white",
     },
     "& .MuiInputBase-input": {
       color: "white", // Input text color remains white
-      backgroundColor: "black", // Black background for the input
+      backgroundColor: "black",
+      
       ...(descriptionInput && {
-        minHeight: "150px", // Minimum height for description field
-        height: "auto", // Auto height for content expansion
-        width: "500px", // Set desired width for description field
+        minHeight: "150px", 
+        height: "auto", 
+        width: "500px",
+      color:"white"
       }),
     },
+  },
+  "& .MuiInput-root": {
+    color: "white",
+    fontFamily: "Arial",
+    "&:before": {
+      borderColor: "grey",
+
+      borderWidth: "1px",
+    },
+    "&:after": {
+      borderWidth: "3px",
+    },
+    ":hover:not(.Mui-focused)": {
+      "&:before": {
+        borderWidth: "2px",
+      },
+    }
   },
 }));
 

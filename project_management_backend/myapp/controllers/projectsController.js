@@ -11,6 +11,7 @@ const getAllProjects = async (req, res) => {
             select * from projects
             where managerid=$1 or user_id=$1
         `, [user]);
+        console.log(result.rows)
         res.status(200).json(result.rows.map((row)=>({"id":row.id,"title":row.title})));
     }
     catch (err) {

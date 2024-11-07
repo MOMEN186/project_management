@@ -1,32 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { Avatar, Box, TextField } from "@mui/material";
-import { useLocation } from "react-router-dom";
-
+import { cookiesContext } from "../../App";
+import About from "./About";
+import "../../App.css";
+import CoverPhoto from "./CoverPhoto";
+import ProfilePhoto from "./ProfilePhoto";
 export default function Profile() {
-  const location = useLocation();
-  console.log(location);
-  const [user, setUser] = useState({
-    first_name: location.state?.first_name || "",
-    last_name: location.state?.last_name || "",
-    id: location.state?.id || "",
-    username: location.state?.username || "",
-    avatar: location.state?.avatar,
-  });
+  const cookies = useContext(cookiesContext);
+  console.log(cookies.get("user"));
+  // const [user] = useState(cookies.get("user"));
+  // const [userProfile, ] = useState({
+  //   first_name: user?.first_name || "",
+  //   last_name: user?.last_name || "",
+  //   id: user?.id || "",
+  //   username: user?.username || "",
+  //   avatar: user?.avatar,
+  //   email: user?.email,
+  //   profile_photo: user?.profile_photo,
+  //   cover_photo: user?.cover_photo,
+  // });
 
   return (
-      <Box display="flex" justifyContent="center" alignItems="center" minWidth="100vw"
-      component="form"
-      >
-      <Avatar sx={{ width: 150, height: 150 }}>
-        {user.avatar
-          ? user.avatar
-          : (user.first_name[0] + user.last_name[0]).toUpperCase()}
-          </Avatar>
-          
-          <TextField>
-              
-          </TextField>
+    <Box display="flex" sx={{ flexGrow: 1 }} width="100%">
+      <Grid container width="100vw" sx={{ postion: "reative" }}>
+        <Grid width="100%">
+          <CoverPhoto />
+        </Grid>
+        <Grid>
+          <ProfilePhoto />
+        </Grid>
+        <Grid
+          disply="flex"
+          alignContent="center"
+          justifyContent="center"
+          container
+          width="100%"
+          marginTop={10}
+        >
+          <Grid item sx={{ backgroundColor: "#1d2025", width: "35%" }}>
+            <About />
+          </Grid>
+          <Grid item sx={{ backgroundColor: "#1d2025", width: "25%" }}></Grid>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

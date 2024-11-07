@@ -1,73 +1,164 @@
 import {
-  Button,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+  Avatar,
+  AvatarGroup,
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid2";
-
 import { Link, NavLink } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
-import { getTeams } from "../../controllers/TeamsController";
+import { getTeamMembers, getTeams } from "../../controllers/TeamsController";
 import { cookiesContext } from "../../App";
+import { StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
 
-export default function TeamsList() {
+export default function TeamsList({ small }) {
   const cookies = useContext(cookiesContext);
   const [user] = useState(cookies.get("user"));
   const [token] = useState(user?.token || "");
   const [teams, setTeams] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState(search);
 
   useEffect(() => {
     async function fetchTeams() {
       const result = await getTeams(user.id, token);
-      setTeams(result || []);
+      const withTeamMembers = await Promise.all(
+        result.map(async (team) => {
+          let members = await getTeamMembers(team.id, user.token, 5);
+          members.push(user);
+          return { ...team, members };
+        })
+      );
+
+      setTeams(withTeamMembers);
     }
 
     fetchTeams();
   }, []);
 
-  const Demo = styled("div")(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
-  }));
+  useEffect(() => {
+    let result = teams;
+    console.log(teams);
+    if (search.length) {
+      console.log(search);
+      result = teams.filter((team) => {
+        return team?.team_name?.includes(search);
+      });
+    }
+    setSearchResult(result);
+  }, [search, teams]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <Demo>
-          <List
-            component="nav"
-            sx={{ color: "white", backgroundColor: "black" }}
+    <Box sx={{ flexGrow: 1, p: 2 }}>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <NavLink
+            style={{
+              color: "#a4c0cc",
+              textDecoration: "none",
+
+              "&:hover": {
+                backgroundColor: "grey",
+              },
+            }}
+            to="/addteam"
           >
-            <ListItem>
-              <ListItemButton component={Link} to="/addteam">
-                <ListItemText primary="Add Team" />
-              </ListItemButton>
-            </ListItem>
-            {teams.map((team, id) => (
-              <Button
-                component={Link}
-                to={`/teams/${team.id}`}
-                style={{ color: "white", textDecoration: "none" }}
+            Create Team
+          </NavLink>
+        </Grid>
+        <Grid
+          size={10}
+          item
+          fullWidth
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <StyledTextField
+            id="standard-basic"
+            label="search for teams"
+            variant="standard"
+            value={search}
+            fullWidth
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            sx={{ color: "red", width: "50%" }}
+          />
+        </Grid>
+        {searchResult.length? (
+          searchResult.map((team) => (
+            <Grid>
+              <Card
+                sx={{
+                  width: "145px",
+                  height: "180px",
+                  backgroundColor: "#14181b",
+                  color: "white",
+                }}
               >
-                <ListItem
-                  sx={{
-                    paddingRight: 10,
-                    "&:hover": { backgroundColor: "grey" },
-                  }}
+                <CardActionArea
+                  sx={{ height: "100%" }}
+                  component={Link}
+                  to={`/teams/${team.id}`}
                 >
-                  <ListItemButton
-                    sx={{ "&:hover": { backgroundColor: "grey" } }}
+                  <CardMedia
+                    component="img"
+                    height="83px"
+                    image={`https://picsum.photos/seed/${team.id}/300/200`}
+                    alt={`${team.team_name}'s image`}
+                  />
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }}
                   >
-                    <ListItemText primary={team.team_name} />
-                  </ListItemButton>
-                </ListItem>
-              </Button>
-            ))}
-          </List>
-        </Demo>
+                    <Typography
+                      gutterBottom
+                      variant="caption"
+                      component="div"
+                      sx={{ overflow: "hidden", whiteSpace: "nowrap" }}
+                    >
+                      {team.team_name}
+                    </Typography>
+                    <AvatarGroup max={5}>
+                      {team.members &&
+                        team.members.length &&
+                        team.members.map((member) => (
+                          <Avatar
+                            sx={{
+                              height: 24,
+                              width: 24,
+                              fontSize: 8,
+                              backgroundColor: "#0150d0",
+                            }}
+                            key={member.id}
+                            alt={member.first_name}
+                          >
+                            {(
+                              member.first_name[0] + member.last_name[0]
+                            ).toUpperCase()}
+                          </Avatar>
+                        ))}
+                    </AvatarGroup>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+         <Grid></Grid>
+        )}
+
+      
       </Grid>
-    </Grid>
+    </Box>
   );
 }

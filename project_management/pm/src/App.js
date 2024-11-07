@@ -14,7 +14,7 @@ import Team from "./components/TeamsFolder/Team";
 import TeamsList from "./components/TeamsFolder/TeamsList";
 import Cookies from "universal-cookie";
 import Profile from "./components/ProfileFolder/Profile";
-
+import "./App.css"
 export const cookiesContext = createContext();
 const cookies = new Cookies();
 

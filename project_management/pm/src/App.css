@@ -1,8 +1,8 @@
 html,
 body {
-  color: white;
+  color: #afb9c5;
   height: 100%;
-  background-color: #000000;
+  background-color:#1d2025;
   display: flex;
   /* align-items: center;
   justify-content: center; */
@@ -64,7 +64,7 @@ input:focus {
 
 .loginbtn{
 color:white;
-background-color:black;
+background-color:#1d2025;
 box-shadow: none;
 border: 0cap;
 font-size: large;
@@ -136,3 +136,17 @@ font-size:medium ;
   height: calc(100% - 65px); 
 
 }
+
+.nav-link{
+  color:#a4c0cc;
+  text-decoration: none;
+  height:40px;
+  width:200px;
+  padding:1;
+  vertical-align: baseline;
+}
+.nav-link:hover{
+
+background-color: #282D33;
+}
+

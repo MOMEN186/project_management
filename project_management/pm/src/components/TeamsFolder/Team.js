@@ -62,10 +62,14 @@ function Team() {
         rowGap="5vh"
         marginLeft="10px"
 
-      >
-        <Typography >
+      >{
+         
+            <Typography >
           {id?"Edit Team":"Create Team"}
         </Typography>
+        
+      }
+      
         <StyledTextField
           variant="outlined"
           label="team name"

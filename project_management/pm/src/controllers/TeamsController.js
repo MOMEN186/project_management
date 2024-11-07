@@ -10,8 +10,9 @@ export async function getTeams(userID, token) {
       user_id: userID,
     },
   });
-
+  
   const data = await response.json();
+  
   return data.result;
 }
 
@@ -72,13 +73,14 @@ export async function getAllUsers(team_id, token) {
   return data;
 }
 
-export async function getTeamMembers(id, token) {
+export async function getTeamMembers(id, token,limit) {
   const response = await fetch(`http://localhost:8080/teams/members/${id}`, {
     method: "GET", // Corrected to lowercase
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
       token: token,
+      limit: limit,
     },
   });
 

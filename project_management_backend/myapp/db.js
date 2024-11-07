@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 const schedule = require('node-schedule');
-
+const multer=require('multer')
 const pool = new Pool({
   user: 'postgres',
   password: '2000',
@@ -31,6 +31,12 @@ module.exports = {
   stopCleanUpJob: () => {
     job.cancel(); 
     console.log("task clean up tokens just cancelled");
-  }
+  },
+  upload: multer ({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize:5*1024*1024,
+    }
+  })
 };
 
