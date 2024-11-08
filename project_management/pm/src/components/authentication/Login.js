@@ -1,19 +1,14 @@
 import {
   Box,
   Button,
-  Table,
-  TableCell,
-  TableContainer,
-  TableRow,
   Typography,
 } from "@mui/material";
 import React, { useState, useContext } from "react";
 import { StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { login } from "../../controllers/authController";
 import { useNavigate } from "react-router-dom";
 import { cookiesContext } from "../../App";
-import Profile from "../ProfileFolder/Profile";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

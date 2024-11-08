@@ -1,6 +1,10 @@
 import { Box, Button, Dialog, IconButton } from "@mui/material";
-import { useContext, useState } from "react";
-import { DeleteImage, getImage, UploadImage } from "../../controllers/ProfileController";
+import { useContext, useEffect, useState } from "react";
+import {
+  DeleteImage,
+  getImage,
+  UploadImage,
+} from "../../controllers/ProfileController";
 import { styled } from "@mui/material/styles";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { cookiesContext } from "../../App";
@@ -21,32 +25,45 @@ function CoverPhoto() {
   const cookies = useContext(cookiesContext);
   const [user] = useState(cookies.get("user"));
   const [open, setOpen] = useState(false);
-  const [cover_photo, setCover_photo] = useState(
+  const [coverPhoto, setCoverPhoto] = useState(
     localStorage.getItem("cover_photo")
   );
 
-  const handleUpload = async(file) => {
+  useEffect(() => {
+    async function fetchCoverPhoto() {
+      const result = await getImage(user.token, user.id, "cover_photo");
+      const pf = result?.coverPhoto?.data
+        ? btoa(String.fromCharCode(...result.coverPhoto.data))
+        : "";
+
+      localStorage.setItem("cover_photo", pf);
+      setCoverPhoto(pf);
+    }
+    if (localStorage.getItem("cover_photo") === null) fetchCoverPhoto();
+  }, []);
+
+  const handleUpload = async (file) => {
     const formData = new FormData();
     formData.append("cover_photo", file);
-    await  UploadImage(user.token, user.id, formData,"cover_photo").then(() => {
+    await UploadImage(user.token, user.id, formData, "cover_photo").then(() => {
       setOpen(false);
     });
-   
-      const result = await getImage(user.token, user.id, "cover_photo");
-      const cf = result?.cover_photo?.data
-          ? btoa(String.fromCharCode(...result.cover_photo.data))
-          : '';
-      
-      localStorage.setItem("cover_photo", cf);
-      setCover_photo(cf);
-    
-      console.log(result)
+
+    const result = await getImage(user.token, user.id, "cover_photo");
+    const cf = result?.cover_photo?.data
+      ? btoa(String.fromCharCode(...result.cover_photo.data))
+      : "";
+
+    localStorage.setItem("cover_photo", cf);
+    setCoverPhoto(cf);
+
+    console.log(result);
   };
 
-  const handleDelete = () => {
-    DeleteImage(user.token, user.id, "cover_photo");
+  const handleDelete = async () => {
+    await DeleteImage(user.token, user.id, "cover_photo");
     localStorage.removeItem("cover_photo");
-    setCover_photo("");
+    setCoverPhoto("");
   };
   return (
     <Box width="100%" sx={{ flexGrow: 1 }}>
@@ -58,13 +75,13 @@ function CoverPhoto() {
           display="flex"
           flexDirection="column"
           sx={{
-            backgroundImage: cover_photo
-              ? `url(data:image/jpeg;base64,${cover_photo})`
+            backgroundImage: coverPhoto
+              ? `url(data:image/jpeg;base64,${coverPhoto})`
               : "linear-gradient(270deg, rgb(255, 240, 179) 0%, rgb(255, 196, 0) 100%)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              position: "relative",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            position: "relative",
             "&:hover": {
               "& .icon-button": {
                 display: "flex",
