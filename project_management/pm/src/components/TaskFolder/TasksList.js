@@ -60,7 +60,7 @@ function TasksList() {
             <ListItemButton
               component={Link}
               to={`/tasks/${task.id}`}
-              sx={{ "&:hover": { backgroundColor: "grey" } }}
+              sx={{ "&:hover": { backgroundColor: "grey" }, width:"100%" }}
             >
               <ListItemText primary={task.title} />
             </ListItemButton>

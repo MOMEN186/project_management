@@ -1,15 +1,14 @@
 import { formatDate } from "./dateController";
 
-export async function getTasks(userID,token) {
-
-  console.log({userID,token})
+export async function getTasks(userID, token) {
+  console.log({ userID, token });
   const response = await fetch("http://localhost:8080/tasks", {
     method: "GET", // Corrected to lowercase
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
-      "token": token,
-      "user_id": userID,
+      token: token,
+      user_id: userID,
     },
   });
 
@@ -17,38 +16,36 @@ export async function getTasks(userID,token) {
   return data;
 }
 
-export async function deleteTask(id,token) {
-
+export async function deleteTask(id, token) {
   let responseStatus = 0;
   await fetch("http://localhost:8080/tasks", {
     method: "DELETE",
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
-      "token": token,
+      token: token,
     },
     body: JSON.stringify({
-      id:id
+      id: id,
     }),
   }).then((response) => {
-    console.log({response})
+    console.log({ response });
     if (!response.ok) {
       throw new Error("error");
     }
     responseStatus = 200;
   });
-  console.log({responseStatus})
+  console.log({ responseStatus });
   return responseStatus;
- 
 }
 
-export async function createTask(taskDetails,token) {
-  await  fetch("http://localhost:8080/tasks/", {
+export async function createTask(taskDetails, token) {
+  await fetch("http://localhost:8080/tasks/", {
     method: "POST",
     headers: {
       Accept: "*/*",
       "Content-Type": "application/json",
-      "token":token,
+      token: token,
     },
     body: JSON.stringify({
       title: taskDetails.title,
@@ -57,7 +54,7 @@ export async function createTask(taskDetails,token) {
       end_date: taskDetails.tday,
       status: taskDetails.status,
       project_id: taskDetails.project_id,
-      assignee_id:taskDetails.assignee_id,
+      assignee_id: taskDetails.assignee_id,
     }),
   })
     .then((response) => {
@@ -75,42 +72,121 @@ export async function createTask(taskDetails,token) {
     });
 }
 
-
-export async function updateTask(taskDetails,token) {
+export async function updateTask(taskDetails, token) {
   await fetch("http://localhost:8080/tasks/", {
-      method: "PUT",
-      headers: {
-        Accept: "*/*",
-        "Content-Type": "application/json",
-        "token":token,
-      },
-      body: JSON.stringify({
-        title: taskDetails.title,
-        description: taskDetails.description,
-        end_date: taskDetails.tday,
-        status: taskDetails.status,
-        id: taskDetails.id,
-        project_id:taskDetails.projectId
-        
-      }),
+    method: "PUT",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    },
+    body: JSON.stringify({
+      title: taskDetails.title,
+      description: taskDetails.description,
+      end_date: taskDetails.tday,
+      status: taskDetails.status,
+      id: taskDetails.id,
+      project_id: taskDetails.projectId,
+    }),
   });
-  
 }
 
-
-export async function getTaskByID(id,token) {
-  
- const result= await fetch(`http://localhost:8080/tasks/${id}`, {
-      method: "GET",
-      headers: {
-        Accept: "*/*",
-        "Content-Type": "application/json",
-        "token":token,
-      },
-  
+export async function getTaskByID(id, token) {
+  const result = await fetch(`http://localhost:8080/tasks/${id}`, {
+    method: "GET",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    },
   });
 
   const data = result.json();
   return data;
+}
+
+export async function addComment(token, userID, taskID, content) {
+  const result = await fetch(`http://localhost:8080/tasks/${taskID}/addcomment`, {
+    method: "POST",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    },
+    body:JSON.stringify( {
+      content,
+      userID,
+    }),
+  });
+
+  const data = result.json();
+  return data;
+}
+
+
+export async function getComments(token, taskID) {
+  
+  const result = await fetch(`http://localhost:8080/tasks/${taskID}/getcomments`, {
+    method: "GET",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+
+    },
+ 
+  });
+
+  const data = await result.json();
+  console.log(data);
+  return data;
+
+}
+
+export async function editComment(token, userId, taskID, commentID, comment) {
+  console.log(commentID)
+  const result = await fetch(`http://localhost:8080/tasks/${taskID}/editcomment`, {
+    method: "PATCH",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    },
+    body: JSON.stringify({
+      userId,commentID,comment
+    }),
+ 
+  });
+
+  const data = await result.json();
+  console.log(data);
+  return data;
+
+
+
+}
+
+
+export async function deleteComment(token, userId, taskId, commentId) {
+  
+  const result = await fetch(`http://localhost:8080/tasks/${taskId}/deletecomment`, {
+    method: "DELETE",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    },
+    body: JSON.stringify({
+      userId,taskId,commentId
+    })
+    
+ 
+  });
+
+  const data = await result.json();
+  console.log(data);
+  return data;
+
+
 
 }

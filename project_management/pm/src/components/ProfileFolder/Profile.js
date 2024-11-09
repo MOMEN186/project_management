@@ -24,7 +24,7 @@ export default function Profile() {
           width="100%"
           marginTop={10}
         >
-          <Grid item sx={{ backgroundColor: "#1d2025", width: "35%" }}>
+          <Grid item sx={{ backgroundColor: "#1d2025", width: "60%" }}>
             <About />
           </Grid>
         </Grid>

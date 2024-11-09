@@ -1,152 +1,75 @@
-html,
-body {
+/* General page styles */
+html, body {
   color: #afb9c5;
   height: 100%;
-  background-color:#1d2025;
+  background-color: #1d2025;
   display: flex;
-  /* align-items: center;
-  justify-content: center; */
-  height: 100%;
-
 }
 
-.app {
-  height: 100%;
+/* Quill editor styling */
+.ql-container {
+  height: calc(150px - 60px) !important;
+  overflow-y: auto;
+  color: #a4c0cc;
 }
 
-.Login {
-  width: 500px;
-  height: 300px;
-  border: 1px solid lightgoldenrodyellow;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  
-    
+.ql-toolbar {
+  background: #1d2025;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-.login_items{
-  width: 300px;
-  margin: 5px;
-  text-align: center;     
+.ql-toolbar .ql-stroke,
+.ql-toolbar .ql-fill,
+.ql-toolbar .ql-picker {
+  stroke: #a4c0cc !important;
+  color: #a4c0cc !important;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  align-content: center;
-
-}
-input,
-input:focus {
-  color: white;
-  width: 250px;
-  height: 20px;
-  margin-top: 10pxs;
-  background-color: black;
-  border:0cap;
-  border-radius: 0%;
+.ql-toolbar .ql-picker-options {
+  background-color: #1d2025 !important;
 }
 
-.navbar {
-  width: 15%;
-  height: 100vh;
-  background-color: antiquewhite;
-  padding-left: 5px;
+/* Borderless editor mode */
+.borderless-editor .ql-container,
+.borderless-editor .ql-container:hover,
+.borderless-editor .ql-container:focus,
+.borderless-editor .ql-editor:focus,
+.borderless-editor .ql-editor {
+  border: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  min-height: auto !important;
+  background: transparent !important;
 }
 
-.section {
-  margin-top: 50px;
+/* Editing mode */
+.borderless-editor.editing {
+  background-color: #f5f5f5;
+  border-radius: 4px;
 }
 
-.loginbtn{
-color:white;
-background-color:#1d2025;
-box-shadow: none;
-border: 0cap;
-font-size: large;
+.borderless-editor.editing .ql-container {
+  border: 1px solid #ccc !important;
+  border-top: none !important;
+  height: auto !important;
 }
 
-.topNav{
-  display:flex;
-  flex-direction: row;
-  margin-left: 50px;
-  margin-top: 10px;
+.borderless-editor.editing .ql-toolbar {
+  border: 1px solid #ccc !important;
+  border-bottom: none !important;
+  background-color: white;
 }
 
-button{
-  color:white;
-  background-color: #000000;
-  border: #000000;
-  font-size: 20px;
-  
+.borderless-editor.editing .ql-editor {
+  padding: 12px !important;
+  min-height: 100px !important;
+  background-color: white;
 }
 
-button:hover{
-  border-radius: 10px solid white;
-}
-
-.taskForm{
-
-color:rgb(255, 255, 255);
-font-size: larger;
-/* display: flex;
-align-items: center;
-justify-content: center; */
-margin-top: 200px;;
-margin-left:500px;
-}
-input{
-  display: inline-block;
-  /* background-color: aliceblue; */
-  border: 1px solid lightgoldenrodyellow;
-  /* border-radius: 5px;  */
-}
-input::placeholder{
-  color: rgb(255, 255, 255);
-  font-size: larger;
-}
-
-label{
-  display: inline-block;
-  margin-right: 50px;;
-  margin-top: 7px;
-}
-
-.task_desc{
-  width:300px;
-  height : 200px;
-  background-color: #000000;
-  color:aliceblue;
-  border: 1px solid lightgoldenrodyellow;
-
-}
-
-
-.show_details{
-font-size:medium ;
-
-}
-
-
-.quill,.ql-container{
-  height: calc(100% - 65px); 
-
-}
-
-.nav-link{
-  color:#a4c0cc;
-  text-decoration: none;
-  height:40px;
-  width:200px;
-  padding:1;
-  vertical-align: baseline;
-}
-.nav-link:hover{
-
-background-color: #282D33;
+/* Remove unwanted scrollbars */
+.borderless-editor .ql-container {
+  height: auto !important;
 }
 

@@ -18,6 +18,7 @@ import {
   StyledDatePicker,
   StyledTextField,
 } from "./styled/TaskFormStyled";
+import Grid from "@mui/material/Grid2";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ReactQuill from "react-quill";
@@ -29,7 +30,8 @@ import {
   getTaskByID,
 } from "../../controllers/TaskController";
 import { cookiesContext } from "../../App";
-
+import Comment from "./Comment";
+import CommentsList from "./CommentsList";
 function Task() {
   const { id } = useParams();
 
@@ -90,123 +92,163 @@ function Task() {
   return (
     <ThemeProvider theme={theme}>
       <Box
-        component="form"
         sx={{
-          color: "white",
-          padding: "20px",
-          width: 1,
+          width: "100%",
+          flexGrow: 1,
+          height: "100%",
         }}
-        display="flex"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        rowGap="4vh"
-        flexDirection="column"
         noValidate
       >
-        <Typography>{id ? "Edit Task" : "Create Task"}</Typography>
-        <StyledTextField
-          variant="outlined"
-          label="Title"
-          value={taskDetails.title}
-          onChange={(e) => {
-            setTaskDetails({ ...taskDetails, title: e.target.value });
-          }}
-          sx={{ width: "350px" }}
-        />
-
-        <FormControl fullWidth>
-          <Select
-            // defaultValue={""}
-            value={taskDetails.projectId}
-            onChange={(e) => {
-              const selected_project = projects.find(
-                (p) => p.id === e.target.value
-              );
-              setTaskDetails({
-                ...taskDetails,
-                projectId: selected_project.id,
-              });
-            }}
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="project"
-            sx={{ width: "350px" }}
-          >
-            {projects.map((project) => (
-              <MenuItem value={project.id} key={project.id}>
-                {project.title}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <ReactQuill
-          style={{
-            maxHeight: "300px",
-            overflow: "auto",
-            maxWidth: "350px",
-          }}
-          theme="snow"
-          value={taskDetails.description}
-          onChange={(e) => {
-            setTaskDetails({ ...taskDetails, description: e });
-          }}
-          modules={{
-            toolbar: [
-              ["bold", "italic", "underline", "strike"], // Text styling
-              [{ list: "ordered" }, { list: "bullet" }], // Lists
-              [{ header: [1, 2, 3, false] }], // Headers
-              [{ align: [] }], // Text alignment
-            ],
-          }}
-        ></ReactQuill>
-
-        <FormControl sx={{ minWidth: "350px" }}>
-          <InputLabel id="demo-simple-select-helper-label">Status</InputLabel>
-          <Select
-            labelId="demo-simple-select-helper-label"
-            id="demo-simple-select-helper"
-            value={taskDetails.status}
-            onChange={(e) => {
-              setTaskDetails({ ...taskDetails, status: e.target.value });
-            }}
-          >
-            <MenuItem value="todo">Todo</MenuItem>
-            <MenuItem value="In Progress">In Progress</MenuItem>
-            <MenuItem value="Code Review">Code Review</MenuItem>
-            <MenuItem value="QA">QA</MenuItem>
-            <MenuItem value="Finished Susbended">Finished Susbended</MenuItem>
-          </Select>
-          <FormHelperText>Task Status</FormHelperText>
-        </FormControl>
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <StyledDatePicker
-            value={taskDetails.tday}
-            onChange={(e) => {
-              console.log({ e });
-              setTaskDetails({ ...taskDetails, tday: e });
-            }}
-            label="dead line"
-            slots={{
-              openPickerButton: StyledButton,
-              day: StyledDay,
-              textField: (params) => <StyledTextField {...params} />,
-            }}
-          />
-        </LocalizationProvider>
-
-        <Button
-          variant="outlined"
-          sx={{
-            color: "white",
-            borderColor: "gray",
-            marginLeft: 1,
-          }}
-          onClick={handleSubmit}
+        <Grid
+          container
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          flexDirection="row"
+          height="100%"
         >
-          save
-        </Button>
+          <Grid
+            item
+            display="flex"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            flexDirection="column"
+            rowGap="4vh"
+            padding="20px"
+          >
+            <Typography>{id ? "Edit Task" : "Create Task"}</Typography>
+            <StyledTextField
+              variant="outlined"
+              label="Title"
+              value={taskDetails.title}
+              onChange={(e) => {
+                setTaskDetails({ ...taskDetails, title: e.target.value });
+              }}
+              sx={{ width: "350px" }}
+            />
+
+            <FormControl fullWidth>
+              <InputLabel>Project</InputLabel>
+              <Select
+                // defaultValue={""}
+                value={taskDetails.projectId}
+                onChange={(e) => {
+                  const selected_project = projects.find(
+                    (p) => p.id === e.target.value
+                  );
+                  setTaskDetails({
+                    ...taskDetails,
+                    projectId: selected_project.id,
+                  });
+                }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="project"
+                sx={{ width: "350px" }}
+              >
+                {projects.map((project) => (
+                  <MenuItem value={project.id} key={project.id}>
+                    {project.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <ReactQuill
+              className=""
+              style={{
+                maxHeight: "300px",
+                overflow: "auto",
+                maxWidth: "350px",
+              }}
+              theme="snow"
+              value={taskDetails.description}
+              onChange={(e) => {
+                setTaskDetails({ ...taskDetails, description: e });
+              }}
+              modules={{
+                toolbar: [
+                  ["bold", "italic", "underline", "strike"], // Text styling
+                  [{ list: "ordered" }, { list: "bullet" }], // Lists
+                  [{ header: [1, 2, 3, false] }], // Headers
+                  [{ align: [] }], // Text alignment
+                ],
+              }}
+            ></ReactQuill>
+
+            <FormControl sx={{ minWidth: "350px" }}>
+              <InputLabel id="demo-simple-select-helper-label">
+                Status
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={taskDetails.status}
+                onChange={(e) => {
+                  setTaskDetails({ ...taskDetails, status: e.target.value });
+                }}
+              >
+                <MenuItem value="todo">Todo</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
+                <MenuItem value="Code Review">Code Review</MenuItem>
+                <MenuItem value="QA">QA</MenuItem>
+                <MenuItem value="Finished Susbended">
+                  Finished Susbended
+                </MenuItem>
+              </Select>
+              <FormHelperText>Task Status</FormHelperText>
+            </FormControl>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <StyledDatePicker
+                value={taskDetails.tday}
+                onChange={(e) => {
+                  setTaskDetails({ ...taskDetails, tday: e });
+                }}
+                label="dead line"
+                slots={{
+                  openPickerButton: StyledButton,
+                  day: StyledDay,
+                  textField: (params) => <StyledTextField {...params} />,
+                }}
+              />
+            </LocalizationProvider>
+
+            <Button
+              variant="outlined"
+              sx={{
+                color: "white",
+                borderColor: "gray",
+                marginLeft: 1,
+              }}
+              onClick={handleSubmit}
+            >
+              save
+            </Button>
+          </Grid>
+
+          <Grid
+            display="flex"
+            flexDirection="column"
+            sx={{
+              marginLeft: "200px",
+              padding: "20px",
+              marginTop: "50px",
+              overflowY: "hidden",
+              height: "100%",
+            }}
+          >
+            <Grid>
+              <Typography>Comments</Typography>
+            </Grid>
+            <Grid>
+              <Comment taskID={taskDetails.id} />
+            </Grid>
+            <Grid marginTop={3}>
+              <CommentsList taskID={taskDetails.id} />
+            </Grid>
+          </Grid>
+        </Grid>
       </Box>
     </ThemeProvider>
   );

@@ -51,7 +51,7 @@ async function login(req, res) {
   const body = req.body;
   const email = body['email'];
   const password = body['password'];
-  
+  console.log({email,password})
   try {
     const result = await db.query(
       `

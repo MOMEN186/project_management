@@ -22,7 +22,7 @@ function Login() {
     ? btoa(String.fromCharCode(...result.cover_photo.data))
     : '';
     
-    console.log(cover_photo);
+    console.log(result);
     localStorage.setItem("cover_photo",cover_photo)
     const userCookies = {
       email: result.email,

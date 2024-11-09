@@ -2,7 +2,6 @@ const db = require("../db");
 
 
 const getAllProjects = async (req, res) => {
-    console.log("in get projects");
     const headers = req.headers;
     const user = headers["manager_id"] || headers["user_id"];
     console.log({ user });
@@ -11,7 +10,6 @@ const getAllProjects = async (req, res) => {
             select * from projects
             where managerid=$1 or user_id=$1
         `, [user]);
-        console.log(result.rows)
         res.status(200).json(result.rows.map((row)=>({"id":row.id,"title":row.title})));
     }
     catch (err) {
@@ -26,7 +24,6 @@ const getAllProjects = async (req, res) => {
 
 const createProject = async (req, res) => {
     
-    console.log("in create project");
 
     const body = req.body;
     const title = body["title"];
@@ -56,14 +53,12 @@ const createProject = async (req, res) => {
 }
 
 const updateProject = async (req, res) => {
-    console.log("in update project")
     const body = req.body;
     const id = body["id"];
     const manager_id = body["manager_id"];
     const description = body["description"];
     const title=body["title"];
     const end_date = body["end_date"];
-    console.log({id, description, title, end_date,manager_id})
     try {
        const result=  await db.query(`
             update projects
@@ -73,7 +68,6 @@ const updateProject = async (req, res) => {
             where id=$4 and managerid=$5
            
         `, [description, title, end_date, id,manager_id]);
-            console.log({result})
         res.status(200).json({"message":"project updated successfully"})
     }
     catch (err) {
@@ -89,7 +83,6 @@ const updateProject = async (req, res) => {
 const deleteProject = async (req, res) => {
     const body = req.body;
     const id = body["id"];
-    console.log("in delete projects",id);
 
     try {
         const result = await db.query(`
@@ -109,13 +102,11 @@ const deleteProject = async (req, res) => {
 const getProjectByID = async (req, res) => {
     
     const id = req.params.id;
-    console.log("in get project by id");
     try {
         const result = await db.query(`
         select * from projects
         where id=$1
         `, [id]);
-        console.log(result.rows[0]);
         res.status(200).json(result.rows[0]);
     }
     catch (e) {
