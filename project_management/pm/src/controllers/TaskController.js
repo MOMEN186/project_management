@@ -35,7 +35,6 @@ export async function deleteTask(id, token) {
     }
     responseStatus = 200;
   });
-  console.log({ responseStatus });
   return responseStatus;
 }
 
@@ -101,8 +100,8 @@ export async function getTaskByID(id, token) {
     },
   });
 
-  const data = result.json();
-  return data;
+  const data = await result.json();
+  return data[0];
 }
 
 export async function addComment(token, userID, taskID, content) {
@@ -138,7 +137,6 @@ export async function getComments(token, taskID) {
   });
 
   const data = await result.json();
-  console.log(data);
   return data;
 
 }
@@ -159,7 +157,6 @@ export async function editComment(token, userId, taskID, commentID, comment) {
   });
 
   const data = await result.json();
-  console.log(data);
   return data;
 
 
@@ -184,9 +181,78 @@ export async function deleteComment(token, userId, taskId, commentId) {
   });
 
   const data = await result.json();
+  return data;
+
+
+
+}
+
+
+
+export async function addFile(token, userId, taskId,formData) {
+  
+
+  const result = await fetch(`http://localhost:8080/tasks/${taskId}/addfile`, {
+    method: "POST",
+    headers: {
+      Accept: "*/*",
+      token: token,
+    },
+    body: formData
+    
+    
+ 
+  });
+
+  const data = await result.json();
+  return data;
+
+  
+}
+
+
+export async function getFiles(token, taskId) {
+  
+  const result = await fetch(`http://localhost:8080/tasks/${taskId}/getfiles`, {
+    method: "GET",
+    headers: {
+      Accept: "*/*",
+      token: token,
+    }, 
+  });
+
+  const data = await result.json();
+  return data;
+
+
+
+  
+}
+
+
+export async function deleteFile(token,taskId,attId,userId) {
+  
+  console.log(attId)
+  const result = await fetch(`http://localhost:8080/tasks/${taskId}/deletefile`, {
+    method: "DELETE",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+      token: token,
+    }, 
+    body: JSON.stringify({
+      attId: attId,
+      userId:userId
+    })
+  });
+
+
+  const data = await result.json();
   console.log(data);
   return data;
 
 
 
 }
+
+

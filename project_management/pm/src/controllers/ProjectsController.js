@@ -1,7 +1,6 @@
 import { formatDate } from "./dateController";
 
 export async function getProjects(user,token) {
-  console.log({ token,user });
 
   const result = await fetch("http://localhost:8080/projects", {
     method: "GET",
@@ -14,12 +13,10 @@ export async function getProjects(user,token) {
   });
 
   const data = await result.json();
-  console.log(data)
   return data;
 }
 
 export async function createProject(projectDetails, token) {
-  console.log("in create project",{ projectDetails });
   let responseStatus = 0;
 
   await fetch("http://localhost:8080/projects/", {
@@ -54,8 +51,7 @@ export async function createProject(projectDetails, token) {
 }
 
 export async function UpdateProject(projectDetails, token) {
-  console.log("in updateproject", { projectDetails });
-  await fetch("http://localhost:8080/projects", {
+ const result= await fetch("http://localhost:8080/projects", {
     method: "PUT",
     headers: {
       Accept: "*/*",
@@ -64,24 +60,14 @@ export async function UpdateProject(projectDetails, token) {
     },
     body: JSON.stringify({
       title: projectDetails.title,
-      description:  projectDetails.description,
-      end_date:  projectDetails.tday,
+      description: projectDetails.description,
+      end_date: projectDetails.tday,
       id: projectDetails.id,
-      manager_id:projectDetails.manager_id,
+      manager_id: projectDetails.manager_id,
     }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log({ data });
-    })
-    .catch((e) => {
-      console.log({ e });
-    });
+ });
+
+  return result.ok;
 }
 
 export async function deleteProject(id, token) {

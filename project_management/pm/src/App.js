@@ -1,7 +1,7 @@
 // App.js
 import "./App.css";
 import React, { createContext } from "react";
-import {  Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Login from "./components/authentication/Login";
 import Signup from "./components/authentication/Signup";
 import Homepage from "./components/Homepage";
@@ -21,7 +21,7 @@ export const cookiesContext = createContext();
 const cookies = new Cookies();
 
 function App() {
-  const isAuthenticated = cookies.get("user")?.token;
+  const isAuthenticated = () => cookies.get("user")?.token;
 
   return (
     <Router>
@@ -35,50 +35,115 @@ function App() {
           {/* Protected Routes */}
           <Route
             path="/"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Homepage />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Homepage />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/tasks"
-            element={<ProtectedRoute condition={isAuthenticated} element={<TasksList />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<TasksList />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/tasks/:id"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Task />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Task />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/addtask"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Task />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Task />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/projects"
-            element={<ProtectedRoute condition={isAuthenticated} element={<ProjectsList />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<ProjectsList />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/addproject"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Project />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Project />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/projects/:id"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Project />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Project />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/teams"
-            element={<ProtectedRoute condition={isAuthenticated} element={<TeamsList />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<TeamsList />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/addteam"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Team />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Team />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/teams/:id"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Team />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Team />}
+                redirectTo="/login"
+              />
+            }
           />
           <Route
             path="/profile"
-            element={<ProtectedRoute condition={isAuthenticated} element={<Profile />} redirectTo="/login" />}
+            element={
+              <ProtectedRoute
+                condition={isAuthenticated}
+                element={<Profile />}
+                redirectTo="/login"
+              />
+            }
           />
 
-         
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </cookiesContext.Provider>

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Dialog, IconButton, Stack } from "@mui/material";
+import { Avatar, Box, Button, Dialog, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { cookiesContext } from "../../App";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";

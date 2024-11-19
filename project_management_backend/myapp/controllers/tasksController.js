@@ -174,7 +174,7 @@ const editComment = async (req, res) => {
   const commentId = body['commentID'];
   const comment = body['comment'];
   const userId = body['userId'];
-  console.log("in edit comment",taskId,commentId,comment,userId)
+  console.log('in edit comment', taskId, commentId, comment, userId);
   try {
     const result = await db.query(
       `
@@ -183,7 +183,7 @@ const editComment = async (req, res) => {
       content=$1 
       where task_id=$2 and id=$3 and user_id = $4 
     `,
-      [comment,taskId, commentId, userId],
+      [comment, taskId, commentId, userId],
     );
     res.status(200).json('comment updated successfully');
   } catch (e) {
@@ -193,44 +193,94 @@ const editComment = async (req, res) => {
   }
 };
 
-
-
 const deleteComment = async (req, res) => {
-  
   const taskID = req.params.id;
   const body = req.body;
-  const commentID = body["commentId"];
-  const userID = body["userId"];
+  const commentID = body['commentId'];
+  const userID = body['userId'];
 
-
-  console.log("in delete comment",taskID,commentID,userID)
+  console.log('in delete comment', taskID, commentID, userID);
 
   try {
-    
-    const result = await db.query(`
+    const result = await db.query(
+      `
     
     delete from comments
 
     where id=$1 and task_id =$2 and user_id=$3
 
-    `, [commentID, taskID, userID]);
+    `,
+      [commentID, taskID, userID],
+    );
 
-
-    res.status(200).json("comment deleted successfully");
-
-  }
-
-  catch (e) {
-
+    res.status(200).json('comment deleted successfully');
+  } catch (e) {
     console.log(e);
 
-    res.status(500).json("cant delete comment");
-    
-
+    res.status(500).json('cant delete comment');
   }
+};
 
+const addFile = async (req, res) => {
+  const id = req.params.id;
+  const data = req.file;
+  const userID = req.body['userId'];
+  console.log(data)
+  try {
+    const result = await db.query(
+      `
+    
+        insert into attachements(
+          attachement,user_id,task_id,type,name )
+        values($1,$2,$3,$4,$5)
+    `,
+      [data.buffer, userID, id, data.mimetype,data.originalname],
+    );
+    res.status(200).json('file uploaded successfully');
+  } catch (e) {
+    console.log({ e });
 
-}
+    res.status(500).json('cant upload file');
+  }
+};
+
+const getFiles = async (req, res) => {
+  const id = req.params.id;
+    console.log("in get files")
+  try {
+    const result = await db.query(
+      `
+      select * from attachements
+      where task_id=$1
+    
+    `,
+      [id],
+    );
+    res.status(200).json(result.rows);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json('cant get files');
+  }
+};
+
+const deleteFile = async (req, res) => {
+  const att_id = req.body['attId'];
+  const task_id = req.params.id;
+  console.log("in delete files", req.body);
+  try {
+    const result = await db.query(
+      `
+      delete from attachements 
+      where id=$1 and task_id=$2
+    `,
+      [att_id, task_id]
+    );
+    res.status(200).json('file deleted successfully');
+  } catch (e) {
+    console.log(e);
+    res.status(500).json('cant delete file');
+  }
+};
 
 module.exports = {
   getAllTasks,
@@ -241,5 +291,8 @@ module.exports = {
   addComment,
   getComments,
   editComment,
-  deleteComment
+  deleteComment,
+  addFile,
+  getFiles,
+  deleteFile,
 };

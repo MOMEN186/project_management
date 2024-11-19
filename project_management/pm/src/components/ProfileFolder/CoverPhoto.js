@@ -45,6 +45,7 @@ function CoverPhoto() {
   const handleUpload = async (file) => {
     const formData = new FormData();
     formData.append("cover_photo", file);
+ 
     await UploadImage(user.token, user.id, formData, "cover_photo").then(() => {
       setOpen(false);
     });

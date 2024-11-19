@@ -67,8 +67,8 @@ function Project() {
     if (!projectDetails.id)
       responseStatus = await createProject(projectDetails, token);
     else responseStatus = await UpdateProject(projectDetails, token);
-
-    if (responseStatus === 200) alert("cant submit")
+    console.log({responseStatus})
+    if (responseStatus) navigate("/projects")
   };
 
   return (

@@ -17,7 +17,6 @@ export default function CommentsList({ taskID }) {
   useEffect(() => {
     async function fetchComments() {
       const result = await getComments(user.token, taskID);
-      console.log(result);
       setComments(result || []);
     }
 
@@ -47,7 +46,7 @@ export default function CommentsList({ taskID }) {
         {comments &&
           comments.length > 0 &&
           comments.map((comment) => (
-            <Grid container display="flex" flexDirection="column">
+            <Grid container display="flex" flexDirection="column" key={comment.id}>
               <Grid item display="flex" flexDirection="row" alignItems="center">
                 <Avatar sx={{ width: 32, height: 32 }}>
                   {comment.username[0]}
@@ -58,7 +57,7 @@ export default function CommentsList({ taskID }) {
               </Grid>
 
               {comment.id === editingID ? (
-                <Comment commentID={comment.id} taskID={comment.task_id} />
+                <Comment commentID={comment.id} taskID={comment.task_id} content={ comment.content} />
               ) : (
                 <RQ value={comment.content} />
               )}
