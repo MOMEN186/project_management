@@ -14,6 +14,8 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
   Typography,
@@ -27,14 +29,35 @@ import {
 import ReactQuill from "react-quill";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import PestControlIcon from "@mui/icons-material/PestControl";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Attachments from "./Attachements";
+import LowPriorityIcon from "@mui/icons-material/LowPriority";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 const status = [
   "todo",
   "In Progress",
   "Code Review",
   "QA",
   "Finished Susbended",
+];
+const type = [
+  { name: "task", icon: <CheckBoxIcon sx={{ color: "#4389e1" }} /> },
+  { name: "story", icon: <BookmarkBorderIcon sx={{ color: "#76952c" }} /> },
+  { name: "bug", icon: <PestControlIcon sx={{ color: "#e46157" }} /> },
+];
+const priority = [
+  {
+    name: "Low",
+    icon: <LowPriorityIcon sx={{ color: "green" }} />,
+  },
+  {
+    name: "Medium",
+    icon: <FormatListBulletedIcon sx={{ color: "#4389e1" }} />,
+  },
+  { name: "High", icon: <PriorityHighIcon sx={{ color: "red" }} /> },
 ];
 
 export default function TaskForm({ id }) {
@@ -49,6 +72,8 @@ export default function TaskForm({ id }) {
     projectId: "",
     id: id,
     assignee_id: "",
+    type: "",
+    priority: "",
   });
 
   const [projects, setProjects] = useState([]);
@@ -76,6 +101,8 @@ export default function TaskForm({ id }) {
         projectId: result?.project_id,
         id: result?.id,
         assignee_id: result?.assignee_id,
+        type: result?.type,
+        priority: result?.priority,
       });
     }
     fetchTaskByID();
@@ -109,7 +136,7 @@ export default function TaskForm({ id }) {
       />
 
       <Attachments taskId={id} />
-      
+
       <FormControl fullWidth>
         <InputLabel>Project</InputLabel>
         <Select
@@ -175,6 +202,54 @@ export default function TaskForm({ id }) {
           ))}
         </Select>
         <FormHelperText>Task Status</FormHelperText>
+      </FormControl>
+
+      <FormControl sx={{ minWidth: "350px" }}>
+        <InputLabel id="demo-simple-select-helper-label">type</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={taskDetails.type}
+          onChange={(e) => {
+            setTaskDetails({ ...taskDetails, type: e.target.value });
+          }}
+        >
+          {type.map(({ name, icon }, index) => (
+            <MenuItem key={index} value={name}>
+              <Grid sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <ListItemIcon sx={{ minWidth: "auto" }}>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </Grid>
+            </MenuItem>
+          ))}
+        </Select>
+        <FormHelperText>type</FormHelperText>
+      </FormControl>
+
+      <FormControl sx={{ minWidth: "350px" }}>
+        <InputLabel id="demo-simple-select-helper-label">Priority</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={taskDetails.priority}
+          onChange={(e) => {
+            console.log(taskDetails.priority);
+            setTaskDetails({ ...taskDetails, priority: e.target.value });
+          }}
+        >
+          {priority.map(({ name, icon }, index) => (
+            <MenuItem key={index} value={name}>
+              <Grid sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <ListItemIcon>
+                  {icon}
+                 
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </Grid>
+            </MenuItem>
+          ))}
+        </Select>
+        <FormHelperText>priority</FormHelperText>
       </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>

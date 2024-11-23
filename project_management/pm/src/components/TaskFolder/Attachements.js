@@ -20,6 +20,7 @@ export default function Attachement({ taskId }) {
   const cookies = useContext(cookiesContext);
   const [user] = useState(cookies.get("user"));
   const [attachements, setAttachements] = useState([]);
+  
   const handleUpload = async (file) => {
     console.log(file);
     const formData = new FormData();

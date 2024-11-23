@@ -86,6 +86,8 @@ export async function updateTask(taskDetails, token) {
       status: taskDetails.status,
       id: taskDetails.id,
       project_id: taskDetails.projectId,
+      type: taskDetails.type,
+      priority:taskDetails.priority,
     }),
   });
 }

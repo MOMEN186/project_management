@@ -4,9 +4,8 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "../../App.css";
 import { deleteFile } from "../../controllers/TaskController";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { cookiesContext } from "../../App";
-import dayjs from "dayjs";
 import { formatDate } from "../../controllers/dateController";
 const excel = [
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -26,14 +25,27 @@ function downloadFile(data, filename, type) {
 }
 
 function PdfFile({ fileData }) {
-  const blob = new Blob([new Uint8Array(fileData.attachement.data)], {
+  const [pdfUrl, setPdfUrl] = useState("");
+
+  useEffect(() => {
+       const blob = new Blob([new Uint8Array(fileData.attachement.data)], {
     type: "application/pdf",
   });
-  const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
+    setPdfUrl(url);
+  },[])
+
+
   return (
     <Grid item>
-      <iframe src={url} title={fileData.name} height="90px" width="150px" />
-    </Grid>
+    <object
+      data={pdfUrl}
+      type="application/pdf"
+      height="90px"
+      width="150px"
+    >
+    </object>
+  </Grid>
   );
 }
 
@@ -53,42 +65,56 @@ function ImageFile({ fileData }) {
 }
 
 function WordFile({ fileData }) {
-  const blob = new Blob([new Uint8Array(fileData.attachement.data)], {
+ 
+  const [wordUrl, setWordUrl] = useState("");
+
+  useEffect(() => {
+     const blob = new Blob([new Uint8Array(fileData.attachement.data)], {
     type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   });
-  const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
+    setWordUrl(url);
+  },[])
+
   return (
     <Grid item>
-      <iframe
-        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-          url
-        )}`}
+      <object
+        src={wordUrl}
         title={fileData.name}
         height="90px"
         width="150px"
+        aria-label="d"
+        type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
       />
     </Grid>
   );
 }
 
 function ExcelFile({ fileData }) {
-  const binaryData = new Uint8Array(fileData.attachement.data);
+  
+  const [excelUrl, setExcelUrl] = useState("");
+  useEffect(() => {
+      const binaryData = new Uint8Array(fileData.attachement.data);
   const blob = new Blob([binaryData], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
   const url = URL.createObjectURL(blob);
-  console.log(url);
+    setExcelUrl(url);
+
+    return () => {
+      URL.revokeObjectURL(url);
+    }
+    },[fileData])
+
   return (
     <Grid>
-      <iframe
-        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
-          url
-        )}`}
+      <object
+        src={excelUrl}
         width="150px"
         height="90px"
         style={{ border: "none" }}
         title="Excel Viewer"
-      ></iframe>
+      ></object>
     </Grid>
   );
 }

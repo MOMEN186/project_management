@@ -38,7 +38,6 @@ export default function ProjectsList({ addProject }) {
 
   const handelDelete = async (id) => {
     const responseStatus = await deleteProject(id, token);
-    console.log({ responseStatus });
     if (responseStatus === 200) navigate("/projects");
   };
 

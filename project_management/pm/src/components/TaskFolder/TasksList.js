@@ -8,10 +8,21 @@ import {
   ListItemText,
   List,
   IconButton,
+  ListItemIcon,
+  Icon,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { cookiesContext } from "../../App";
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import PestControlIcon from "@mui/icons-material/PestControl";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
+
+const type = [
+  { name: "task", icon: <CheckBoxIcon sx={{ color: "#4389e1" }} /> },
+  { name: "story", icon: <BookmarkBorderIcon sx={{ color: "#76952c" }} /> },
+  { name: "bug", icon: <PestControlIcon sx={{ color: "#e46157" }} /> },
+];
 function TasksList() {
 
   const [tasks, setTasks] = useState([]);
@@ -48,8 +59,10 @@ function TasksList() {
             <ListItemText primary="Add Task" />
           </ListItemButton>
         </ListItem>
-        {tasks.map((task) => (
-          <ListItem
+        {tasks.map((task) => {
+          const taskType=type.find((t)=>t.name===task.type);
+          
+        return  <ListItem
             sx={{ paddingRight: 10, "&:hover": { backgroundColor: "grey" } }}
             secondaryAction={
               <IconButton edge="end" onClick={handelDelete}>
@@ -60,12 +73,15 @@ function TasksList() {
             <ListItemButton
               component={Link}
               to={`/tasks/${task.id}`}
-              sx={{ "&:hover": { backgroundColor: "grey" }, width:"100%" }}
+              sx={{ "&:hover": { backgroundColor: "grey" }, width: "100%" }}
             >
+              <ListItemIcon>
+              {taskType?.icon||null}
+              </ListItemIcon>
               <ListItemText primary={task.title} />
             </ListItemButton>
           </ListItem>
-        ))}
+        })}
       </List>
     </Box>
   );

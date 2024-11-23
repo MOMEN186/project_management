@@ -54,18 +54,22 @@ const updateTask = async (req, res) => {
   const end_date = body['end_date'];
   const title = body['title'];
   const project_id = body['project_id'];
+  const type = body["type"];
+  const priority = body["priority"];
   try {
-    const result = await db.query(
+     await db.query(
       `
       update tasks
       set descrip=$2,
        status=$3,
        end_date=$4,
        title=$5,
-       project_id=$6
+       project_id=$6,
+       type=$7,
+       priority=$8
       where id=$1
       `,
-      [id, descrip, status, end_date, title, project_id],
+      [id, descrip, status, end_date, title, project_id,type,priority],
     );
     res.status(200).json({
       message: 'task updated successfully',
@@ -89,7 +93,7 @@ const deleteTask = async (req, res) => {
   const task_id = body['id'];
 
   try {
-    const result = db.query(
+    await  db.query(
       `
       delete from tasks
 
@@ -133,7 +137,7 @@ const addComment = async (req, res) => {
   const content = body['content'];
 
   try {
-    const result = await db.query(
+  await db.query(
       `
       insert into comments (task_id,user_id,content)
       values($1,$2,$3)
@@ -176,7 +180,7 @@ const editComment = async (req, res) => {
   const userId = body['userId'];
   console.log('in edit comment', taskId, commentId, comment, userId);
   try {
-    const result = await db.query(
+     await db.query(
       `
       update comments
       set 
@@ -202,7 +206,7 @@ const deleteComment = async (req, res) => {
   console.log('in delete comment', taskID, commentID, userID);
 
   try {
-    const result = await db.query(
+    await db.query(
       `
     
     delete from comments
@@ -227,7 +231,7 @@ const addFile = async (req, res) => {
   const userID = req.body['userId'];
   console.log(data)
   try {
-    const result = await db.query(
+     await db.query(
       `
     
         insert into attachements(
@@ -268,7 +272,7 @@ const deleteFile = async (req, res) => {
   const task_id = req.params.id;
   console.log("in delete files", req.body);
   try {
-    const result = await db.query(
+  await db.query(
       `
       delete from attachements 
       where id=$1 and task_id=$2
