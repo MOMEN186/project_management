@@ -4,151 +4,176 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import IconButton from '@mui/material/IconButton';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { createTheme } from '@mui/material/styles';
+const fontColor = "#a4c0cc";
+const bg = "#1d2025";
 
 const StyledTextField = styled(TextField)(({ descriptionInput }) => ({
   "& label": {
-    color: "white",
+    color: fontColor, // Label color
   },
-  "&:hover label": {
-    fontWeight: 700,
+  "& .MuiInputLabel-root .MuiInputRoot": {
+    color: fontColor, // Ensure label is correct color by default
   },
-  "& label.Mui-focused": {
-    color: "white",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "white",
+  "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-shrink": {
+    color: fontColor, // Label color when focused or shrunk (floating)
+    transform: "translate(14px, -6px) scale(0.75)", // Floating label position
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white",
+      borderColor: fontColor, // Default border color
+      color: fontColor,
     },
     "&:hover fieldset": {
-      borderColor: "white",
-      borderWidth: 2,
+      borderColor: fontColor, // Hover border color
+      borderWidth: 2, // Slightly thicker border on hover
+      color: fontColor,
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white",
+      borderColor: fontColor, // Focused border color
+      color: fontColor,
     },
     "& .MuiInputBase-input": {
-      color: "white", // Input text color
-      backgroundColor: "black", // Black background for input
+      color: fontColor, // Input text color
+      backgroundColor: bg, // Background color for input
       ...(descriptionInput && {
-        minHeight: "150px", // Minimum height for description field
-        height: "auto", // Set auto height if content grows
-        width: "500px", // Set desired width
+        minHeight: "150px",
+        height: "auto",
+        width: "500px",
       }),
+    },
+  },
+  "& .MuiInput-root": {
+    color: fontColor,
+    fontFamily: "Arial",
+    "&:before": {
+      borderColor: fontColor,
+      borderWidth: "1px",
+    },
+    "&:after": {
+      borderWidth: "3px",
+    },
+    ":hover:not(.Mui-focused)": {
+      "&:before": {
+        borderWidth: "2px",
+      },
     },
   },
 }));
 
-  const StyledDatePicker = styled(DatePicker)({
-    "& .MuiInputBase-root": {
-      color: "white",  // Input text color
-      backgroundColor: "black",  // Black background for input
-    },
-    "& .MuiSvgIcon-root": {
-      color: "white"  ,// Color for the calendar icon
-      backgroundColor: "black",  // Black background for input
-  
-    },
-  });
-  
-  
-  
-  const StyledButton = styled(IconButton)(({ theme }) => ({
-    borderRadius: theme.shape.borderRadius,
-    color: "white",
-     backgroundColor: "black",
-  
-  }));
+const StyledDatePicker = styled(DatePicker)({
+  "& .MuiInputBase-root": {
+    color: fontColor,
+    backgroundColor: bg,
+    width: "350px",
+    paddingRight: "0px",
+  },
+  "& .MuiInputAdornment-root": {
+    position: "end",
+    marginRight: "15px",
+  },
+  "& .MuiSvgIcon-root": {
+    color: fontColor,
+    backgroundColor: bg,
+  },
+  "& .MuiPickersPopper-root": {
+    width: "350px",
+  },
+});
 
+// Custom Icon Button for Date Picker
+const StyledButton = styled(IconButton)({
+  color: fontColor,
+  backgroundColor: bg,
+  borderRadius: "1px",
+});
 
-
-  const StyledDay = styled(PickersDay)(({ theme }) => ({
-    backgroundColor: "black",  // Calendar day background color
-    color: "white",  // Calendar day text color
+// Day Component Styles
+const StyledDay = styled(PickersDay)({
+  backgroundColor: bg,
+  color: fontColor,
+  border:"none",
+  "&:hover": {
+    backgroundColor: fontColor,
+    color: bg,
+  },
+  "&.Mui-selected": {
+    backgroundColor: fontColor,
+    color: bg,
     "&:hover": {
-      backgroundColor: "white",  // Hover state for days
-      color: "black"
+      backgroundColor: fontColor,
+      color: bg,
     },
-    "&.Mui-selected": {
-      backgroundColor: "white",  // Selected day background color
-      color: "black",  // Selected day text color
-      "&:hover": {
-        backgroundColor: "white",  // Ensure hover doesn't change the selected day
-        color: "black"
-      },
-      "&:focus": {
-        backgroundColor: "white",  // Ensure focus doesn't change the selected day
-        color: "black"
-      }
+    "&:focus": {
+      backgroundColor: fontColor,
+      color: bg,
     },
-  }));
+  },
+});
 
-  
-  const theme = createTheme({
-    palette: {
-      mode: 'dark', // This globally enables dark mode
-      backgroundColor:"black"
+// Theme Overrides for Calendar Components
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    background: {
+      default: bg,
     },
-    components: {
-      MuiPickersDay: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "black", // Days background
-            color: "white", // Days text color
-          },
+  },
+  components: {
+    MuiPickersDay: {
+      styleOverrides: {
+        root: {
+          backgroundColor: bg,
+          color: fontColor,
         },
       },
-      MuiCalendarPicker: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "black", // Entire calendar background
-            color: "white",
-          },
+    },
+    MuiCalendarPicker: {
+      styleOverrides: {
+        root: {
+          backgroundColor: bg,
+          color: fontColor,
         },
       },
-      MuiDialog: {
-        styleOverrides: {
-          paper: {
-            backgroundColor: "black", // Calendar dialog background
-            color: "white", // Text color inside dialog
-          },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: bg,
+          color: fontColor,
         },
       },
-      MuiPickersCalendarHeader: {
-        styleOverrides: {
-          root: {
-            backgroundColor: "black", // Calendar header background
-            color: "white", // Header text color
-          },
-          label: {
-            backgroundColor: "black",
-            color: "white", // Month label color
-          },
-          switchViewButton: {
-            color: "white", // View switcher (month/year view toggle) color
-          },
+    },
+    MuiPickersCalendarHeader: {
+      styleOverrides: {
+        root: {
+          backgroundColor: bg,
+          color: fontColor,
+        },
+        label: {
+          color: fontColor,
+        },
+        switchViewButton: {
+          color: fontColor,
         },
       },
-      MuiSvgIcon: {
-        styleOverrides: {
-          root: {
-            backgroundColor:"black",
-            color: "white",  // Previous and next month icon color
-          },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: fontColor,
         },
       },
     },
     MuiPickersToolbar: {
       styleOverrides: {
         root: {
-          color: 'white',
-          backgroundColor: 'black',
-        }
-      }
-    }
-  });
+          color: fontColor,
+          backgroundColor: bg,
+        },
+      },
+    },
+  },
+});
 
 
 

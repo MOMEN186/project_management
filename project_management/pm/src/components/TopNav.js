@@ -1,16 +1,20 @@
+import React, { useState, useContext, useEffect } from "react";
+import "../App.css";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
 
-import React, { useState,useContext} from "react";
-import "../App.css"
-import { NavLink} from "react-router-dom";
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import { cookiesContext } from "../App";
+import { Avatar } from "@mui/material";
+import { Logout } from "../controllers/authController";
+// import PersonPinIcon from "@mui/icons-material/PersonPin";
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
@@ -40,82 +44,118 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-
-
-
 const commonStyles = {
-  border: 1,
-  width: '1rem',
-  height: '1rem',
-  borderColor: 'text.disabled',
-  color:"white",
+  width: "1rem",
+  height: "1rem",
+  color: "white",
 };
 
 function TopNav() {
-
-
   const [value, setValue] = useState("");
-  
-  const handleChange = (e) => {
-  setValue(e.target.value);
-  
-    
-}  
+  const cookies = useContext(cookiesContext);
+
+  const [user, setUser] = useState(cookies.get("user"));
+  const [token, setToken] = useState(user?.token || "");
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const handleChange = (e) => setValue(e.target.value);
+
+  const handleLogout = async (e) => {
+    await Logout(user.id, token);
+    cookies.remove("user");
+    setToken(null);
+    console.log("logged out", cookies);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    setUser(cookies.get("user"));
+    setToken(user?.token || null);
+    if (!token) {
+      navigate("/login");
+    }
+  }, [cookies, token]);
 
   return (
-    
-    <Box sx={{ width: "100%" ,display:"flex",justifyContent:"center",alignContent:"center" }}> 
+    <Box
       
-      <Box sx={{ borderBottom: 0,  marginLeft: 1,}}> 
-       
+      sx={{
+        width: "200vh",
+        display: "flex",
+        justifyContent: "center",
+        alignContent: "center",
+      }}
+    >
+      <Box sx={{ borderBottom: 0, marginLeft: 1 }}>
+        <Tabs
+          onChange={handleChange}
+          aria-label="top navigation tabs"
+          sx={{ color: "white" }}
+          value={pathname}
         
-        <Tabs value={value} onChange={handleChange} aria-label="top navigation tabs" sx={{ color: "white" }}>
-          <NavLink to="/"> 
-            <Tab label="Home"  {...a11yProps(0)} sx={{ ...commonStyles, borderRight: 1 }}/>
-          </NavLink>
-          <NavLink to="/login">
-            <Tab label="Login" {...a11yProps(1)} sx={{ ...commonStyles, borderRight: 1 }} />
-          </NavLink>
-          
-          <NavLink to="/teams">
-              <Tab label="Teams" {...a11yProps(2)} sx={{...commonStyles,borderRight:1 }} />
-          </NavLink>
       
-          <NavLink to="/tasks">
-            <Tab label="Tasks" {...a11yProps(3)} sx={{ ...commonStyles, borderRight: 1 }} />
-          </NavLink>
-          <NavLink to="/projects">
-             <Tab label="Projects" {...a11yProps(4)} sx={{...commonStyles,}} />
-          </NavLink>
-         
-      </Tabs>
+        >
+          <Tab
+            label="Home"
+            {...a11yProps(0)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/"
+            value="/"
+          />
+
+          <Tab
+            label="Teams"
+            {...a11yProps(1)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/teams"
+            value="/teams"
+          />
+
+          <Tab
+            label="Tasks"
+            {...a11yProps(2)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/tasks"
+            value="/tasks"
+          />
+
+          <Tab
+            label="Projects"
+            {...a11yProps(3)}
+            sx={{ ...commonStyles }}
+            component={Link}
+            to="/projects"
+            value="/projects"
+          />
+
+          {token && (
+            <Tab
+              label="Logout"
+              {...a11yProps(4)}
+              sx={{ ...commonStyles }}
+              onClick={handleLogout}
+            />
+          )}
+
+          <Tab
+            sx={{ color: "white" }}
+            {...a11yProps(5)}
+            aria-label="person"
+            to="/profile"
+            value="/profile"
+            component={Link}
+            state={user}
+            icon={<Avatar sx={{width:"24px",height:"24px",fontSize:10}}>ME</Avatar>}
+          />
+        </Tabs>
+      </Box>
+
+      
     </Box>
-    <TabPanel value={value} index={0}>
-      Login
-    </TabPanel>
-    <TabPanel value={value} index={1}>
-      Teams
-      </TabPanel>
-
-      <NavLink to="/tasks">
-        <TabPanel value={value} index={2}>
-      Tasks
-      </TabPanel> 
-      </NavLink>
-
-   
-    
-      <NavLink>
-        <TabPanel value={value} >
-        Projects
-      </TabPanel>
-</NavLink>
-   
-  </Box>
-
-    
-
-
   );
 }
 

@@ -1,202 +1,50 @@
-import React, { useEffect, useState,useContext } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import React from "react";
+import { useParams } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
-  Select,
-  Table,
-  TableCell,
-  TableContainer,
-  TableRow,
-} from "@mui/material";
-import {
-  theme,
-  StyledButton,
-  StyledDay,
-  StyledDatePicker,
-  StyledTextField,
-} from "./styled/TaskFormStyled";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import ReactQuill from "react-quill";
-import dayjs from "dayjs";
-import { getProjects } from "../../controllers/ProjectsController";
-import { updateTask,createTask } from "../../controllers/TaskController";
-import { cookiesContext } from "../../App";
+import { Box, Typography } from "@mui/material";
+import { theme } from "./styled/TaskFormStyled";
+import Grid from "@mui/material/Grid2";
+
+import Comment from "./Comment";
+import CommentsList from "./CommentsList";
+import TaskForm from "./TaskForm";
+
 function Task() {
-  const location = useLocation();
-
-  const [title, setTitle] = useState(location.state?.title || "");
-  const [description, setDescription] = useState(location.state?.descrip || "");
-  const [tday, setTday] = useState(dayjs(location.state?.end_date || new Date()));
-  const [status, setStatus] = useState(location.state?.status || "todo");
-  const [projects, setProjects] = useState([]);
-  const [current_project, setCurrent_project] = useState({
-    id: location.state?.id || "",
-    title: '',
-  });
-  const newTask = location.state?.id || 0;
-  const cookies = useContext(cookiesContext);
-  
-  useEffect(() => {
-    async function fetchProjects() {
-      const result = await getProjects(cookies.get("token"));
-      setProjects(result);
-    }
-
-    fetchProjects();
-
-  }, [current_project.id]);
-
-  
-  const handleSubmit = async (e) => {
-    if (newTask)createTask(current_project.id,title,description,tday,status,cookies.get("token"))
-      else
-     updateTask(current_project.id,title, description, tday, status,location.state.id,cookies.get("token"));
-  };
+  const { id } = useParams();
 
   return (
     <ThemeProvider theme={theme}>
-      <Box component="form" sx={{ color: "white", padding: "20px" }} noValidate>
-        <div>
-          <TableContainer>
-            <Table>
-              <TableRow>
-                <TableCell>
-                  <h2>Edit Task</h2>
-                </TableCell>
-              </TableRow>
+      <Box
+        sx={{
+          width: "100%",
+          flexGrow: 1,
+          height: "100%",
+        }}
+        noValidate
+      >
+        <Grid container display="flex" flexDirection="row" height="100%">
+          <Grid
+            display="flex"
+            flexDirection="column"
+            sx={{
+              padding: "20px",
+              height: "100%",
+            }}
+          >
+            <TaskForm id={id} />
+            <Grid container>
+              <Typography>Comments</Typography>
+            </Grid>
+            <Grid>
+              <Comment taskID={id} />
+            </Grid>
+            <Grid container marginTop={3}>
+              <CommentsList taskID={id} />
+            </Grid>
+          </Grid>
 
-              <TableRow>
-                <TableCell>
-                  <StyledTextField
-                    variant="outlined"
-                    label="Title"
-                    value={title}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <FormControl fullWidth >
-                    <Select
-                      value={current_project.id ||""}
-                      onChange={(e) => {
-                        const selected_project = projects.find(p => p.id === e.target.value);
-                        setCurrent_project({
-                          id: selected_project.id,
-                          title:selected_project.title,
-                        });
-                      }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="project"
-                    >
-                      {projects.map((project) => (
-                        <MenuItem  value={project.id} key={project.id}>
-                          {project.title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="ql-container">
-                  <ReactQuill
-                    style={{
-                      maxHeight: "300px",
-                      overflow: "auto",
-                      maxWidth: "350px",
-                    }}
-                    theme="snow"
-                    value={description}
-                    onChange={setDescription}
-                    modules={{
-                      toolbar: [
-                        ["bold", "italic", "underline", "strike"], // Text styling
-                        [{ list: "ordered" }, { list: "bullet" }], // Lists
-                        [{ header: [1, 2, 3, false] }], // Headers
-                        [{ align: [] }], // Text alignment
-                      ],
-                    }}
-                  ></ReactQuill>
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>
-                  <FormControl sx={{ minWidth: 400 }}>
-                    <InputLabel id="demo-simple-select-helper-label">
-                      Status
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-helper-label"
-                      id="demo-simple-select-helper"
-                      value={status}
-                      onChange={(e) => {
-                        
-                        setStatus(e.target.value);
-                      }}>
-                      <MenuItem value="todo">Todo</MenuItem>
-                      <MenuItem value="In Progress">In Progress</MenuItem>
-                      <MenuItem value="Code Review">Code Review</MenuItem>
-                      <MenuItem value="QA">QA</MenuItem>
-                      <MenuItem value="Finished Susbended">
-                        Finished Susbended
-                      </MenuItem>
-                    </Select>
-                    <FormHelperText>Task Status</FormHelperText>
-                  </FormControl>
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <StyledDatePicker
-                      value={tday}
-                      onChange={(newValue) => {
-                        setTday(newValue)
-                      }}
-                      label="dead line"
-                      slots={{
-                        openPickerButton: StyledButton,
-                        day: StyledDay,
-                        textField: (params) => <StyledTextField {...params} />
-                      }}
-                    />
-                  </LocalizationProvider>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <NavLink to="/tasks">
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        color: "white",
-                        borderColor: "gray",
-                        marginLeft: 1,
-                      }}
-                      onClick={handleSubmit}
-                    >
-                      save
-                    </Button>
-                  </NavLink>
-                </TableCell>
-              </TableRow>
-            </Table>
-          </TableContainer>
-        </div>
+          
+        </Grid>
       </Box>
     </ThemeProvider>
   );
