@@ -1,15 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme, StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
-import { createTeam, updateTeam } from "../../controllers/TeamsController";
+import { theme, StyledTextField } from "../components/TaskFolder/styled/TaskFormStyled";
+import { createTeam, updateTeam } from "../controllers/TeamsController";
 import Button from "@mui/material/Button";
 import {  useNavigate, useParams } from "react-router-dom";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
-import "../../App.css";
-import { cookiesContext } from "../../App";
-import Members from "./Members";
-import { getTeamByID } from "../../controllers/TeamsController";
+import "../App.css";
+import { cookiesContext } from "../App";
+import Members from "../components/TeamsFolder/Members";
+import { getTeamByID } from "../controllers/TeamsController";
 function Team() {
 
   const { id } = useParams();

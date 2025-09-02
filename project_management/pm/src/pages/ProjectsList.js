@@ -4,7 +4,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Typography,
 } from "@mui/material";
@@ -14,14 +13,14 @@ import React, { useEffect, useState, useContext } from "react";
 import {
   deleteProject,
   getProjects,
-} from "../../controllers/ProjectsController";
-import { cookiesContext } from "../../App";
+} from "../controllers/ProjectsController";
+import { cookiesContext } from "../App";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 export default function ProjectsList({ addProject }) {
   const [projects, setProjects] = useState([]);
   const cookies = useContext(cookiesContext);
-  const [user] = useState(cookies.get("user"));
+  const [user] = useState(cookies?.get("user"));
   const [token] = useState(user.token);
   const navigate = useNavigate();
 
@@ -43,7 +42,7 @@ export default function ProjectsList({ addProject }) {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={6} >
         {addProject ? (
           <Button
             component={Link}
@@ -56,7 +55,7 @@ export default function ProjectsList({ addProject }) {
           <Typography marginLeft="25px">Projects</Typography>
         )}
         <List>
-          {projects.map((project) => (
+          {projects?.map((project) => (
             <ListItem
               sx={{ paddingRight: 10, "&:hover": { backgroundColor: "grey" } }}
               secondaryAction={

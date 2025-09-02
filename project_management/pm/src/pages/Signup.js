@@ -7,9 +7,9 @@ import {
   TableRow,
 } from "@mui/material";
 import React, { useState } from "react";
-import { StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
+import { StyledTextField } from "../components/TaskFolder/styled/TaskFormStyled";
 import { NavLink, useNavigate } from "react-router-dom";
-import { signup } from "../../controllers/authController";
+import { signup } from "../controllers/authController";
 export default function Signup() {
   
   const [first_name, setFirst_name] = useState("");

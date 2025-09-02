@@ -4,11 +4,11 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState, useContext } from "react";
-import { StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
+import { StyledTextField } from "../components/TaskFolder/styled/TaskFormStyled";
 import { Link } from "react-router-dom";
-import { login } from "../../controllers/authController";
+import { login } from "../controllers/authController";
 import { useNavigate } from "react-router-dom";
-import { cookiesContext } from "../../App";
+import { cookiesContext } from "../App";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

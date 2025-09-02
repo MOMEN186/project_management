@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Link, NavLink } from "react-router-dom";
-import React, { useContext, useEffect, useState } from "react";
-import { getTeamMembers, getTeams } from "../../controllers/TeamsController";
-import { cookiesContext } from "../../App";
-import { StyledTextField } from "../TaskFolder/styled/TaskFormStyled";
+import { useContext, useEffect, useState } from "react";
+import { getTeamMembers, getTeams } from "../controllers/TeamsController";
+import { cookiesContext } from "../App";
+import { StyledTextField } from "../components/TaskFolder/styled/TaskFormStyled";
 
 export default function TeamsList({ small }) {
   const cookies = useContext(cookiesContext);
@@ -26,6 +26,12 @@ export default function TeamsList({ small }) {
   useEffect(() => {
     async function fetchTeams() {
       const result = await getTeams(user.id, token);
+
+      if (!Array.isArray(result)) {
+        setTeams([]);
+        return;
+      }
+
       const withTeamMembers = await Promise.all(
         result.map(async (team) => {
           let members = await getTeamMembers(team.id, user.token, 5);
@@ -90,8 +96,8 @@ export default function TeamsList({ small }) {
             sx={{ color: "red", width: "50%" }}
           />
         </Grid>
-        {searchResult.length? (
-          searchResult.map((team) => (
+        {searchResult?.length > 0 ? (
+          searchResult?.map((team) => (
             <Grid>
               <Card
                 sx={{
@@ -130,7 +136,7 @@ export default function TeamsList({ small }) {
                     </Typography>
                     <AvatarGroup max={5}>
                       {team.members &&
-                        team.members.length &&
+                        team.members.length > 0 &&
                         team.members.map((member) => (
                           <Avatar
                             sx={{
@@ -154,10 +160,8 @@ export default function TeamsList({ small }) {
             </Grid>
           ))
         ) : (
-         <Grid></Grid>
+          <Grid></Grid>
         )}
-
-      
       </Grid>
     </Box>
   );
