@@ -178,7 +178,7 @@ export default function Mention({ teamDetails, setTeamDetails }) {
     async function fetchUsers() {
       const result = await getAllUsers(teamDetails.id, token);
       console.log("all users in mention", result);
-      setUsers(result);
+       setUsers(Array.isArray(result) ? result : []);
     }
 
     fetchUsers();
@@ -205,7 +205,7 @@ export default function Mention({ teamDetails, setTeamDetails }) {
     // defaultValue: [teamDetails.participants],
     multiple: true,
     options: users,
-    getOptionLabel: (option) => option.first_name,
+    getOptionLabel: (option) => option?.first_name,
   });
 
   useEffect(() => {
@@ -229,7 +229,7 @@ export default function Mention({ teamDetails, setTeamDetails }) {
           <input {...getInputProps()} />
         </InputWrapper>
       </div>
-      {groupedOptions.length > 0 ? (
+      {groupedOptions?.length > 0 ? (
         <Listbox {...getListboxProps()}>
           {groupedOptions.map((option, index) => {
             const { key, ...optionProps } = getOptionProps({ option, index });

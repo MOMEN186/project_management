@@ -46,7 +46,7 @@ async function isBlackListed(token) {
 }
 
 async function login(req, res) {
-  console.log("in login")
+  console.log("in login");
 
   const body = req.body;
   const email = body['email'];

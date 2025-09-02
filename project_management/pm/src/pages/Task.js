@@ -2,12 +2,12 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { ThemeProvider } from "@emotion/react";
 import { Box, Typography } from "@mui/material";
-import { theme } from "./styled/TaskFormStyled";
+import { theme } from "../components/TaskFolder/styled/TaskFormStyled";
 import Grid from "@mui/material/Grid2";
 
-import Comment from "./Comment";
-import CommentsList from "./CommentsList";
-import TaskForm from "./TaskForm";
+import Comment from "../components/TaskFolder/Comment";
+import CommentsList from "../components/TaskFolder/CommentsList";
+import TaskForm from "../components/TaskFolder/TaskForm";
 
 function Task() {
   const { id } = useParams();

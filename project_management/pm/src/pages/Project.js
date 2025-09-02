@@ -9,18 +9,18 @@ import {
   StyledDay,
   StyledDatePicker,
   StyledTextField,
-} from "../TaskFolder/styled/TaskFormStyled";
+} from "../components/TaskFolder/styled/TaskFormStyled";
 import {
   UpdateProject,
   createProject,
   getProjectByID,
-} from "../../controllers/ProjectsController";
+} from "../controllers/ProjectsController";
 import Button from "@mui/material/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import "../../App.css";
-import { cookiesContext } from "../../App";
+import "../App.css";
+import { cookiesContext } from "../App";
 import dayjs from "dayjs";
 function Project() {
   let { id } = useParams();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { getTasks, deleteTask } from "../../controllers/TaskController";
+import { getTasks, deleteTask } from "../controllers/TaskController";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   Icon,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { cookiesContext } from "../../App";
+import { cookiesContext } from "../App";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PestControlIcon from "@mui/icons-material/PestControl";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
@@ -59,7 +59,7 @@ function TasksList() {
             <ListItemText primary="Add Task" />
           </ListItemButton>
         </ListItem>
-        {tasks.map((task) => {
+        {tasks.length>0 &&tasks?.map((task) => {
           const taskType=type.find((t)=>t.name===task.type);
           
         return  <ListItem
