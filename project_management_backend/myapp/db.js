@@ -1,12 +1,11 @@
 const { Pool } = require('pg');
 const schedule = require('node-schedule');
-const multer=require('multer')
+const multer = require('multer');
+require('dotenv').config();
+
 const pool = new Pool({
-  user: 'postgres',
-  password: '2000',
-  host: 'localhost',
-  port: 5432, // default Postgres port
-  database: 'project management'
+  connectionString: `${process.env.DATABASE_URL}`,
+ 
 });
 
 function cleanupTokens() {
