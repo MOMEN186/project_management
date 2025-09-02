@@ -3,10 +3,10 @@ const schedule = require('node-schedule');
 const multer=require('multer')
 const pool = new Pool({
   user: 'postgres',
-  password: '2000',
+  password: '0000',
   host: 'localhost',
   port: 5432, // default Postgres port
-  database: 'project management'
+  database: 'jira_clone'
 });
 
 function cleanupTokens() {

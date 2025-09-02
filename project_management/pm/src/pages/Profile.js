@@ -1,10 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import About from "./About";
-import "../../App.css";
-import CoverPhoto from "./CoverPhoto";
-import ProfilePhoto from "./ProfilePhoto";
+import About from "../components/ProfileFolder/About";
+import "../App.css";
+import CoverPhoto from "../components/ProfileFolder/CoverPhoto";
+import ProfilePhoto from "../components/ProfileFolder/ProfilePhoto";
 export default function Profile() {
 
   return (

@@ -102,7 +102,7 @@ export default function About() {
                 <ListItemText primary="Create Team" />
               </ListItemButton>
             </ListItem>
-            {teams.map((team) => (
+            {teams?.length>0 && teams.map((team) => (
               <ListItem key={team.id} sx={{ padding: "4px 0" }}>
                 <ListItemButton
                   component={Link}
