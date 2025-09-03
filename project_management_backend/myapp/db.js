@@ -3,10 +3,11 @@ const schedule = require('node-schedule');
 const multer = require('multer');
 require('dotenv').config();
 
+
 const pool = new Pool({
-  connectionString: `${process.env.DATABASE_URL}`,
+  connectionString: process.env.DATABASE_URL,
  
-});
+ });
 
 function cleanupTokens() {
   pool.query(`select delete_token`, (err, res) => {
