@@ -57,9 +57,6 @@ function Project() {
     fetchProjectByID();
   }, []);
 
-  useEffect(() => {
-    console.log(projectDetails);
-  }, [projectDetails]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -19,7 +19,7 @@ export default function CommentsList({ taskID }) {
       const result = await getComments(user.token, taskID);
       setComments(result || []);
     }
-
+    if(taskID)
     fetchComments();
   }, []);
 

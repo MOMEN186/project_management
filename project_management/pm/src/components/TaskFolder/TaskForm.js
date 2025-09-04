@@ -86,7 +86,7 @@ export default function TaskForm({ id }) {
       const result = await getProjects(user.id, user.token);
       setProjects(result || []);
     }
-
+    if(id)
     fetchProjects();
   }, [user.token, user.id]);
 
@@ -105,6 +105,7 @@ export default function TaskForm({ id }) {
         priority: result?.priority,
       });
     }
+    if(id)
     fetchTaskByID();
   }, []);
 

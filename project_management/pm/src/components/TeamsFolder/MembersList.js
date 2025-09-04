@@ -37,8 +37,10 @@ export default function MemberList({ id }) {
       console.log("all team members", result);
       setMembers(result);
     }
-
-    fetchTeamMembers();
+    console.log(id)
+    if (id!=='' && id!==undefined) {
+      fetchTeamMembers();
+    }
   }, []);
 
   return (

@@ -45,7 +45,7 @@ function Team() {
         participants_count: result.participants_count,
       });
     }
-
+    if(id)
     fetchTeamByID();
   }, []);
 

@@ -59,6 +59,8 @@ export async function updateTeam(teamDetails, token) {
 }
 
 export async function getAllUsers(team_id, token) {
+    
+  if (team_id === '') return;
   const response = await fetch("http://localhost:8080/teams/users", {
     method: "GET", // Corrected to lowercase
     headers: {
@@ -73,7 +75,8 @@ export async function getAllUsers(team_id, token) {
   return data;
 }
 
-export async function getTeamMembers(id, token,limit) {
+export async function getTeamMembers(id, token, limit) {
+  console.log({ id, token });   
   const response = await fetch(`http://localhost:8080/teams/members/${id}`, {
     method: "GET", // Corrected to lowercase
     headers: {
